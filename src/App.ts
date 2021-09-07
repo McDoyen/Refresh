@@ -2,6 +2,7 @@ import logo from "./logo.svg";
 import "./App.css";
 
 import { createElement } from "react";
+import LocationIcon from '@material-ui/icons/LocationOn';
 
 function App() {
   return createElement(
@@ -11,6 +12,7 @@ function App() {
       "header",
       { className: "App-header" },
       createElement("p", {}, "Weather app"),
+      createElement(LocationIcon),
       createElement("img", { className: "App-logo", src: logo }),
       createElement(
         "p",
