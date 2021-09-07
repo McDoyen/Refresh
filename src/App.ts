@@ -10,6 +10,7 @@ function App() {
     createElement(
       "header",
       { className: "App-header" },
+      createElement("p", {}, "Weather app"),
       createElement("img", { className: "App-logo", src: logo }),
       createElement(
         "p",
