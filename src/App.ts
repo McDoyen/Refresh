@@ -13,10 +13,9 @@ function App() {
 
   useEffect(() => {
     if (navigator) {
-      navigator.geolocation.watchPosition((position) => {
-        setCurrentLocation(position.coords);
-        console.log(position.coords);
-      });
+      navigator.geolocation.watchPosition((position) =>
+        setCurrentLocation(position.coords)
+      );
     } else {
       console.log("location access denied");
     }
@@ -29,11 +28,15 @@ function App() {
       "header",
       { className: "App-header" },
       createElement("p", {}, "Weather app"),
-      createElement(LocationIcon, {}),
       createElement(
-        Typography,
-        {},
-        `${currentLocation.longitude} ${currentLocation.latitude}`
+        "div",
+        {className: "Location"},
+        createElement(LocationIcon, {}),
+        createElement(
+          Typography,
+          {},
+          `${currentLocation.longitude} ${currentLocation.latitude}`
+        )
       ),
       createElement("img", { className: "App-logo", src: logo }),
       createElement(
