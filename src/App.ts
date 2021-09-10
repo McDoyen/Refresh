@@ -32,30 +32,11 @@ function App() {
         "div",
         {className: "Location"},
         createElement(LocationIcon, {}),
-        createElement(
-          Typography,
-          {},
-          `${currentLocation.longitude} ${currentLocation.latitude}`
-        )
+        createElement(Typography, {}, weatherDiscription)
       ),
-      createElement("img", { className: "App-logo", src: logo }),
-      createElement(
-        "p",
-        {},
-        "Edit ",
-        createElement("code", {}, "src/App.js"),
-        " and save to reload."
-      ),
-      createElement(
-        "a",
-        {
-          className: "App-link",
-          href: "https://reactjs.org",
-          target: "_blank",
-          rel: "noopener noreferrer",
-        },
-        "Learn React"
-      )
+      createElement("img", {
+        src: `http://openweathermap.org/img/w/${weatherIcon}.png`,
+      })
     )
   );
 }
