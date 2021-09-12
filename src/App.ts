@@ -5,10 +5,13 @@ import LocationIcon from "@material-ui/icons/MyLocation";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import axios from "axios";
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import { MapContainer, TileLayer, Marker } from "react-leaflet";
+import L from 'leaflet'
+import icon from 'leaflet/dist/images/marker-icon.png';
+import iconShadow from 'leaflet/dist/images/marker-shadow.png';
 
 import "./App.css";
-import 'leaflet/dist/leaflet.css';
+import "leaflet/dist/leaflet.css";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -48,6 +51,12 @@ function App() {
   const getLocation = "http://ip-api.com/json/";
 
   let time = new Date();
+  let DefaultIcon = L.icon({
+    iconUrl: icon,
+    shadowUrl: iconShadow
+});
+
+L.Marker.prototype.options.icon = DefaultIcon;
 
   useEffect(() => {
     axios.get(getLocation).then(({ data }) => {
@@ -99,18 +108,16 @@ function App() {
       ),
       createElement(
         Grid,
-        {item: true, xs: 12, sm: 6 },
+        { item: true, xs: 12, sm: 6 },
         createElement(
           MapContainer,
           {
             center: [51.505, -0.09],
             zoom: 13,
-            scrollWheelZoom: false,
+            scrollWheelZoom: false
           },
           createElement(TileLayer, {
-            attribution:
-              '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
-            url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+            url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           }),
           createElement(Marker, { position: [51.505, -0.09] })
         )
