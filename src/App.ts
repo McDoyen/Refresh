@@ -1,36 +1,25 @@
 import { createElement, useEffect, useState } from "react";
 
-import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
 import LocationIcon from "@material-ui/icons/MyLocation";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import axios from "axios";
 import { MapContainer, TileLayer, Marker } from "react-leaflet";
-import L from 'leaflet'
-import icon from 'leaflet/dist/images/marker-icon.png';
-import iconShadow from 'leaflet/dist/images/marker-shadow.png';
+import L from "leaflet";
+import icon from "leaflet/dist/images/marker-icon.png";
+import iconShadow from "leaflet/dist/images/marker-shadow.png";
 
-import "./App.css";
 import "leaflet/dist/leaflet.css";
-
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    currentGrid: { paddingLeft: "25%" },
-    grid: {
-      textAlign: "left",
-      width: "50%",
-    },
-    root: {
-      margin: "60px 60px 60px 60px",
-    },
-    tempGrid: {
-      display: "contents",
-    },
-  })
-);
+import useStyles from "./styles";
 
 function App() {
-  const [{ city, country }, setState] = useState({ city: "", country: "" });
+  const classes = useStyles();
+  const [{ city, country, longitude, latitude }, setState] = useState({
+    city: "",
+    country: "",
+    longitude: 0,
+    latitude: 0,
+  });
   const [{ feelsLike, temperature, weatherDiscription, weatherIcon }, setData] =
     useState({
       feelsLike: 0,
@@ -38,88 +27,116 @@ function App() {
       weatherDiscription: "",
       weatherIcon: "",
     });
-
-  const classes = useStyles();
   const apiKey = process.env.REACT_APP_API_KEY;
 
-  const openWeatherApiURL = axios.get(
-    `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&APPID=${apiKey}`
-  );
-  const openWeatherMapApiURL = axios.get(
-    `https://tile.openweathermap.org/map/temp_new/5/5/5.png?appid=${apiKey}`
-  );
+  const openWeatherApiURL = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&APPID=${apiKey}`;
   const getLocation = "http://ip-api.com/json/";
 
   let time = new Date();
   let DefaultIcon = L.icon({
     iconUrl: icon,
-    shadowUrl: iconShadow
-});
+    shadowUrl: iconShadow,
+  });
 
-L.Marker.prototype.options.icon = DefaultIcon;
+  L.Marker.prototype.options.icon = DefaultIcon;
 
   useEffect(() => {
     axios.get(getLocation).then(({ data }) => {
-      setState({ city: data.city, country: data.country });
+      setState({
+        city: data.city,
+        country: data.country,
+        longitude: data.lon,
+        latitude: data.lat,
+      });
     });
-    axios.all([openWeatherMapApiURL, openWeatherApiURL]).then(
-      axios.spread((...responses) => {
-        setData({
-          feelsLike: responses[1].data.main.feels_like,
-          temperature: responses[1].data.main.temp,
-          weatherDiscription: responses[1].data.weather[0].description,
-          weatherIcon: responses[1].data.weather[0].icon,
-        });
-      })
-    );
-  }, [city, temperature]);
+    axios.get(openWeatherApiURL).then(({ data }) => {
+      setData({
+        feelsLike: data.main.feels_like,
+        temperature: data.main.temp,
+        weatherDiscription: data.weather[0].description,
+        weatherIcon: data.weather[0].icon,
+      });
+    });
+  }, [openWeatherApiURL]);
 
   return createElement(
     "div",
     { className: classes.root },
     createElement(
       Grid,
-      { container: true },
+      { className: classes.locationGrid, item: true, xs: 12 },
+      createElement(LocationIcon, { className: classes.locationIcon }),
+      createElement(Typography, {}, `${city}, ${country}`)
+    ),
+    createElement(
+      Grid,
+      {
+        className: classes.weatherContainer,
+        container: true,
+        direction: "row",
+      },
       createElement(
         Grid,
-        { item: true, xs: 12 },
-        createElement(LocationIcon, {}),
-        createElement(Typography, {}, `${city}, ${country}`)
-      ),
-      createElement(
-        Grid,
-        { className: classes.tempGrid, item: true, xs: 12, sm: 6 },
+        {
+          className: classes.tempGrid,
+          container: true,
+        },
         createElement(
           Grid,
-          { item: true, xs: 6, sm: 3 },
-          createElement(Typography, {}, "CURRENT WEATHER"),
-          createElement(Typography, {}, time.toLocaleTimeString()),
-          createElement("img", {
-            src: `http://openweathermap.org/img/w/${weatherIcon}.png`,
-          }),
-          createElement(Typography, {}, `${temperature}°`)
+          { className: classes.main, item: true, xs: 6, sm: 3 },
+          createElement(
+            Typography,
+            { noWrap: true, variant: "subtitle1" },
+            "CURRENT WEATHER"
+          ),
+          createElement(
+            Typography,
+            { variant: "body2" },
+            time.toLocaleTimeString()
+          ),
+          createElement(
+            Grid,
+            { container: true, direction: "row" },
+            createElement("img", {
+              src: `http://openweathermap.org/img/w/${weatherIcon}.png`,
+            }),
+            createElement(
+              Typography,
+              { className: classes.temp },
+              `${temperature}°`
+            )
+          )
         ),
         createElement(
           Grid,
-          { item: true, xs: 6, sm: 3 },
-          createElement(Typography, {}, weatherDiscription),
-          createElement(Typography, {}, `Feels like ${feelsLike}°`)
+          { className: classes.description, item: true, xs: 6, sm: 3 },
+          createElement(
+            Typography,
+            { variant: "subtitle1" },
+            weatherDiscription
+          ),
+          createElement(
+            Typography,
+            { variant: "body2" },
+            `Feels like ${feelsLike}°`
+          )
         )
       ),
       createElement(
         Grid,
-        { item: true, xs: 12, sm: 6 },
+        { className: classes.mapGrid, item: true, xs: 12, sm: 6 },
         createElement(
           MapContainer,
           {
-            center: [51.505, -0.09],
+            className: classes.map,
+            center: [latitude, longitude],
             zoom: 13,
-            scrollWheelZoom: false
+            scrollWheelZoom: false,
           },
           createElement(TileLayer, {
-            url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
           }),
-          createElement(Marker, { position: [51.505, -0.09] })
+          createElement(Marker, { position: [latitude, longitude] })
         )
       )
     )
