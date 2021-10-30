@@ -4,13 +4,11 @@ import LocationIcon from "@material-ui/icons/MyLocation";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import axios from "axios";
-import { MapContainer, TileLayer, Marker } from "react-leaflet";
-import L from "leaflet";
-import icon from "leaflet/dist/images/marker-icon.png";
-import iconShadow from "leaflet/dist/images/marker-shadow.png";
 
 import "leaflet/dist/leaflet.css";
 import useStyles from "./styles";
+import MapComponent from "./MapComponent";
+import { weatherImages } from "./Constants";
 
 function App() {
   const classes = useStyles();
@@ -33,12 +31,6 @@ function App() {
   const getLocation = "http://ip-api.com/json/";
 
   let time = new Date();
-  let DefaultIcon = L.icon({
-    iconUrl: icon,
-    shadowUrl: iconShadow,
-  });
-
-  L.Marker.prototype.options.icon = DefaultIcon;
 
   useEffect(() => {
     axios.get(getLocation).then(({ data }) => {
@@ -121,24 +113,12 @@ function App() {
             `Feels like ${feelsLike}°`
           )
         )
-      ),
-      createElement(
-        Grid,
-        { className: classes.mapGrid, item: true, xs: 12, sm: 6 },
-        createElement(
-          MapContainer,
-          {
-            className: classes.map,
-            center: [latitude, longitude],
-            zoom: 13,
-            scrollWheelZoom: false,
-          },
-          createElement(TileLayer, {
-            url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-          }),
-          createElement(Marker, { position: [latitude, longitude] })
         )
       )
+          ),
+          latitude && longitude
+            ? createElement(MapComponent, { latitude, longitude }) // TODO: Fix this
+            : null
     )
   );
 }
