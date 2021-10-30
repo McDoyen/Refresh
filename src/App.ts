@@ -92,7 +92,7 @@ function App() {
           createElement(
             Typography,
             { variant: "body2" },
-            time.toLocaleTimeString()
+            time.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
           ),
           createElement(
             Grid,
