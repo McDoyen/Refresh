@@ -1,4 +1,5 @@
 import { createElement, useEffect, useState } from "react";
+import { usePosition } from "use-position";
 
 import LocationIcon from "@material-ui/icons/MyLocation";
 import Grid from "@material-ui/core/Grid";
@@ -12,7 +13,7 @@ import { weatherImages } from "./Constants";
 
 function App() {
   const classes = useStyles();
-  const [{ city, country, longitude, latitude }, setState] = useState({
+  const { latitude, longitude } = usePosition(true);
     city: "",
     country: "",
     longitude: 0,
@@ -27,20 +28,11 @@ function App() {
     });
   const apiKey = process.env.REACT_APP_API_KEY;
 
-  const openWeatherApiURL = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&APPID=${apiKey}`;
-  const getLocation = "http://ip-api.com/json/";
+  const openWeatherApiURL = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&units=metric&APPID=${apiKey}`;
 
   let time = new Date();
 
   useEffect(() => {
-    axios.get(getLocation).then(({ data }) => {
-      setState({
-        city: data.city,
-        country: data.country,
-        longitude: data.lon,
-        latitude: data.lat,
-      });
-    });
     axios.get(openWeatherApiURL).then(({ data }) => {
       setData({
         feelsLike: data.main.feels_like,
