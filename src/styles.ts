@@ -2,7 +2,7 @@ import { makeStyles } from "@material-ui/core";
 
 export default makeStyles(() => ({
   description: {
-    minWidth: "50%",
+    marginLeft: "50px",
   },
   locationGrid: {
     display: "flex",
@@ -12,7 +12,7 @@ export default makeStyles(() => ({
     marginRight: "15px",
   },
   main: {
-    minWidth: "50%",
+    minWidth: "100%",
   },
   map: {
     borderRadius: "10px",
@@ -24,11 +24,24 @@ export default makeStyles(() => ({
   root: {
     margin: "60px 60px 60px 60px",
   },
+  skeleton: {
+    borderRadius: "10px",
+    width: "50%",
+  },
+  skeletonRoot: { margin: "60px 60px 60px 60px" },
+  weatherContentSkeleton: {
+    display: "flex",
+    gap: "5px",
+    height: "23.125em",
+  },
   temp: {
     marginLeft: "8px",
+    lineHeight: "50px",
   },
   tempGrid: {
     backgroundColor: "gainsboro", //TODO: use dynamic images.
+    backgroundImage: `url("https://assets.msn.com/weathermapdata/1/static/background/v2.0/compactads3/Cloudy 1.png")`,
+    backgroundSize: "cover",
     borderRadius: "10px",
     padding: "16px",
     maxWidth: "49.779%",
