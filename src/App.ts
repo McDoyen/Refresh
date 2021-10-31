@@ -35,6 +35,28 @@ function App() {
     weatherDiscription: "",
     weatherIcon: "",
   });
+
+  const weather_image =
+    weatherIcon === "04n"
+      ? weatherImages.brokenClouds
+      : weatherIcon === "01n"
+      ? weatherImages.clearSky
+      : weatherIcon === "01n"
+      ? weatherImages.clearSkySunset //TODO: fix this
+      : weatherIcon === "02n"
+      ? weatherImages.fewClouds
+      : weatherIcon === "50n"
+      ? weatherImages.mist
+      : weatherIcon === "10n"
+      ? weatherImages.rain
+      : weatherIcon === "03n"
+      ? weatherImages.scatteredClouds
+      : weatherIcon === "09n"
+      ? weatherImages.showerRain
+      : weatherIcon === "13n"
+      ? weatherImages.snow
+      : weatherImages.thunderStorm;
+
   const apiKey = process.env.REACT_APP_API_KEY;
 
   const openWeatherApiURL = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&units=metric&APPID=${apiKey}`;
@@ -78,7 +100,7 @@ function App() {
             {
               className: classes.tempGrid,
               container: true,
-              // backgroundImage: weatherIcon === 01d //TODO: use if
+              style: { backgroundImage: `url(${weather_image})` },
             },
             createElement(
               Grid,

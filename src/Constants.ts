@@ -1,12 +1,23 @@
+import brokenClouds from "./Assets/images/weather images/brocken clouds.jpg";
+import clearSkySunset from "./Assets/images/weather images/clear sky sunset.jpg";
+import clearSky from "./Assets/images/weather images/clear sky.jpg";
+import fewClouds from "./Assets/images/weather images/few clouds.jpg";
+import mist from "./Assets/images/weather images/mist.jpg";
+import rain from "./Assets/images/weather images/rain.jpg";
+import scatteredClouds from "./Assets/images/weather images/scattered clouds.jpg";
+import showerRain from "./Assets/images/weather images/shower rain.jpg";
+import snow from "./Assets/images/weather images/snow.jpg";
+import thunderStorm from "./Assets/images/weather images/thunderstom.jpg";
+
 export const weatherImages = {
-  brokenClouds: "../public/weather images/brocken clouds.jpg",
-  clearSkySunset: "../public/weather images/clear sky sunset.jpg",
-  clearSky: "../public/weather images/clear sky.jpg",
-  fewClouds: "../public/weather images/few clouds.jpg",
-  mist: "../public/weather images/mist.jpg",
-  rain: "../public/weather images/rain.jpg",
-  scatteredClouds: "../public/weather images/scattered clouds.jpg",
-  showerRain: "../public/weather images/shower rain.jpg",
-  snow: "../public/weather images/snow.jpg",
-  thunderStorm: "../public/weather images/thunderstom.jpg",
+  brokenClouds,
+  clearSkySunset,
+  clearSky,
+  fewClouds,
+  mist,
+  rain,
+  scatteredClouds,
+  showerRain,
+  snow,
+  thunderStorm,
 } as const;

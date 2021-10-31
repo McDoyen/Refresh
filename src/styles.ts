@@ -40,7 +40,6 @@ export default makeStyles(() => ({
   },
   tempGrid: {
     backgroundColor: "gainsboro", //TODO: use dynamic images.
-    backgroundImage: `url("https://assets.msn.com/weathermapdata/1/static/background/v2.0/compactads3/Cloudy 1.png")`,
     backgroundSize: "cover",
     borderRadius: "10px",
     padding: "16px",
