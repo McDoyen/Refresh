@@ -4,6 +4,7 @@ import { usePosition } from "use-position";
 import LocationIcon from "@material-ui/icons/MyLocation";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
+
 import axios from "axios";
 
 import "leaflet/dist/leaflet.css";
@@ -11,6 +12,7 @@ import useStyles from "./styles";
 import SkeletonComponent from "./SkeletonComponent";
 import MapComponent from "./MapComponent";
 import { weatherImages } from "./Constants";
+import DrawerComponent from "./Drawer/DrawerComponent";
 
 function App() {
   const classes = useStyles();
@@ -77,80 +79,85 @@ function App() {
     });
   }, [openWeatherApiURL, latitude, longitude]);
 
-  return loading
-    ? createElement(SkeletonComponent)
-    : createElement(
-        "div",
-        { className: classes.root },
-        createElement(
-          Grid,
-          { className: classes.locationGrid, item: true, xs: 12 },
-          createElement(LocationIcon, { className: classes.locationIcon }),
-          createElement(Typography, {}, `${city}, ${country}`)
-        ),
-        createElement(
-          Grid,
-          {
-            className: classes.weatherContainer,
-            container: true,
-            direction: "row",
-          },
+  return createElement(
+    "div",
+    {},
+    createElement(DrawerComponent),
+    loading
+      ? createElement(SkeletonComponent)
+      : createElement(
+          "div",
+          { className: classes.root },
+          createElement(
+            Grid,
+            { className: classes.locationGrid, item: true, xs: 12 },
+            createElement(LocationIcon, { className: classes.locationIcon }),
+            createElement(Typography, {}, `${city}, ${country}`)
+          ),
           createElement(
             Grid,
             {
-              className: classes.tempGrid,
+              className: classes.weatherContainer,
               container: true,
-              style: { backgroundImage: `url(${weather_image})` },
+              direction: "row",
             },
             createElement(
               Grid,
-              { className: classes.main, item: true, xs: 6, sm: 3 },
-              createElement(
-                Typography,
-                { noWrap: true, variant: "subtitle1" },
-                "CURRENT WEATHER"
-              ),
-              createElement(
-                Typography,
-                { variant: "body2" },
-                time.toLocaleTimeString([], {
-                  hour: "2-digit",
-                  minute: "2-digit",
-                })
-              ),
+              {
+                className: classes.tempGrid,
+                container: true,
+                style: { backgroundImage: `url(${weather_image})` },
+              },
               createElement(
                 Grid,
-                { container: true, direction: "row" },
-                createElement("img", {
-                  src: `http://openweathermap.org/img/w/${weatherIcon}.png`,
-                }),
+                { className: classes.main, item: true, xs: 6, sm: 3 },
                 createElement(
                   Typography,
-                  { className: classes.temp, variant: "h3" },
-                  `${temperature}°`
+                  { noWrap: true, variant: "subtitle1" },
+                  "CURRENT WEATHER"
                 ),
                 createElement(
-                  "div",
-                  { className: classes.description },
+                  Typography,
+                  { variant: "body2" },
+                  time.toLocaleTimeString([], {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })
+                ),
+                createElement(
+                  Grid,
+                  { container: true, direction: "row" },
+                  createElement("img", {
+                    src: `http://openweathermap.org/img/w/${weatherIcon}.png`,
+                  }),
                   createElement(
                     Typography,
-                    { variant: "subtitle1" },
-                    weatherDiscription
+                    { className: classes.temp, variant: "h3" },
+                    `${temperature}°`
                   ),
                   createElement(
-                    Typography,
-                    { variant: "body2" },
-                    `Feels like ${feelsLike}°`
+                    "div",
+                    { className: classes.description },
+                    createElement(
+                      Typography,
+                      { variant: "subtitle1" },
+                      weatherDiscription
+                    ),
+                    createElement(
+                      Typography,
+                      { variant: "body2" },
+                      `Feels like ${feelsLike}°`
+                    )
                   )
                 )
               )
-            )
-          ),
-          latitude && longitude
-            ? createElement(MapComponent, { latitude, longitude }) // TODO: Fix this
-            : null
+            ),
+            latitude && longitude
+              ? createElement(MapComponent, { latitude, longitude }) // TODO: Fix this
+              : null
+          )
         )
-      );
+  );
 }
 
 export default App;
