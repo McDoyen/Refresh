@@ -51,7 +51,7 @@ function App() {
       ? weatherImages.mist
       : weatherIcon === "10n"
       ? weatherImages.rain
-      : weatherIcon === "03n"
+      : weatherIcon === "03n" || weatherIcon === "10d"
       ? weatherImages.scatteredClouds
       : weatherIcon === "09n"
       ? weatherImages.showerRain
@@ -66,17 +66,22 @@ function App() {
   let time = new Date();
 
   useEffect(() => {
-    axios.get(openWeatherApiURL).then(({ data }) => {
-      setData({
-        city: data.name,
-        country: data.sys.country,
-        feelsLike: data.main.feels_like,
-        loading: false,
-        temperature: data.main.temp,
-        weatherDiscription: data.weather[0].description,
-        weatherIcon: data.weather[0].icon,
-      });
-    });
+    function waitForCordinates() {
+      if (!!latitude) {
+        axios.get(openWeatherApiURL).then(({ data }) => {
+          setData({
+            city: data.name,
+            country: data.sys.country,
+            feelsLike: data.main.feels_like,
+            loading: false,
+            temperature: data.main.temp,
+            weatherDiscription: data.weather[0].description,
+            weatherIcon: data.weather[0].icon,
+          });
+        });
+      }
+    }
+    setTimeout(waitForCordinates, 250);
   }, [openWeatherApiURL, latitude, longitude]);
 
   return createElement(
