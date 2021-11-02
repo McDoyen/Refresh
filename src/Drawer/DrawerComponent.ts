@@ -8,6 +8,7 @@ import ForumIcon from "@material-ui/icons/ForumTwoTone";
 import WeatherIcon from "@material-ui/icons/FilterDramaTwoTone";
 
 import WeatherContainer from "../Weather/WeatherContainer";
+import ChatComponent from "../Chat/ChatComponent";
 
 function DrawerComponent() {
   return createElement(
@@ -34,14 +35,14 @@ function DrawerComponent() {
     createElement(
       Switch,
       {},
-      createElement(Route, { path: "/weather" }, createElement(Weather)),
-      createElement(Route, { path: "/chat" })
+      createElement(
+        Route,
+        { path: "/weather" },
+        createElement(WeatherContainer)
+      ),
+      createElement(Route, { path: "/chat" }, createElement(ChatComponent))
     )
   );
-}
-
-function Weather() {
-  return createElement(WeatherContainer);
 }
 
 export default DrawerComponent;
