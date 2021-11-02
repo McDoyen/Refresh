@@ -28,7 +28,7 @@ export default makeStyles(() => ({
     borderRadius: "10px",
     width: "50%",
   },
-  skeletonRoot: { margin: "60px 60px 60px 60px" },
+  skeletonRoot: { margin: "60px 60px 60px 108px" },
   weatherContentSkeleton: {
     display: "flex",
     gap: "5px",
