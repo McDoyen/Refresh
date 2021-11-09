@@ -15,7 +15,6 @@ import ForumIcon from "@material-ui/icons/ForumTwoTone";
 import WeatherIcon from "@material-ui/icons/FilterDramaTwoTone";
 
 import WeatherContainer from "../Weather/WeatherContainer";
-import { AppBar, Toolbar, Typography } from "@mui/material";
 import ChatContainer from "../Chat/ChatContainer";
 
 function DrawerComponent() {
@@ -26,10 +25,6 @@ function DrawerComponent() {
       Router,
       {},
       createElement(CssBaseline),
-      createElement(AppBar, {
-        style: { position: "fixed" },
-        sx: { width: `calc(100% - ${48}px)`, mr: `${48}px` },
-      }),
       createElement(
         Drawer,
         { variant: "permanent" },

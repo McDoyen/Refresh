@@ -1,4 +1,4 @@
-import { createElement } from "react";
+import { createElement, useState } from "react";
 
 import Grid from "@mui/material/Grid";
 import List from "@mui/material/List";
@@ -10,7 +10,14 @@ import TextField from "@mui/material/TextField";
 import useStyles from "./styles";
 import { Divider, Fab, ListItemButton, ListItemText } from "@mui/material";
 
-function ChatComponent() {
+interface ChatComponentProps {
+  chats: { data: string; time: string; orientation: string }[];
+  messageValue: string;
+  handleSubmit: any;
+  handleChange: any;
+}
+
+function ChatComponent(props: ChatComponentProps) {
   const classes = useStyles();
 
   return createElement(
@@ -84,71 +91,58 @@ function ChatComponent() {
       createElement(
         List,
         {},
-        createElement(
-          ListItem,
-          {},
-          createElement(
-            Grid,
-            { container: true },
+        props.chats.map(
+          (
+            chat: { orientation: any; data: string; time: any },
+            index: number
+          ) =>
             createElement(
-              Grid,
-              { item: true, xs: 12 },
-              createElement(ListItemText, { primary: "Hi" }),
-              createElement(ListItemText, { secondary: "7:44" })
+              ListItem,
+              { key: index },
+              createElement(
+                Grid,
+                { container: true },
+                createElement(
+                  Grid,
+                  {
+                    item: true,
+                    xs: 12,
+                    style: { textAlign: chat.orientation },
+                  },
+                  createElement(ListItemText, { primary: chat.data }),
+                  createElement(ListItemText, { secondary: chat.time })
+                )
+              )
             )
-          )
-        ),
-        createElement(
-          ListItem,
-          {},
-          createElement(
-            Grid,
-            { container: true },
-            createElement(
-              Grid,
-              { item: true, xs: 12 },
-              createElement(ListItemText, {
-                className: classes.textMessage,
-                primary: "Hi",
-              }),
-              createElement(ListItemText, {
-                className: classes.textMessage,
-                secondary: "7:44",
-              })
-            )
-          )
-        ),
-        createElement(
-          ListItem,
-          {},
-          createElement(
-            Grid,
-            { container: true },
-            createElement(
-              Grid,
-              { item: true, xs: 12 },
-              createElement(ListItemText, { primary: "Hi" }),
-              createElement(ListItemText, { secondary: "7:44" })
-            )
-          )
         )
       ),
       createElement(Divider),
       createElement(
-        Grid,
-        { container: true, className: classes.textField },
+        "form",
+        { onSubmit: props.handleSubmit },
         createElement(
           Grid,
-          { item: true, xs: 11 },
-          createElement(TextField, {
-            fullWidth: true,
-            label: "Type something",
-          })
-        ),
-        createElement(
-          Grid,
-          { className: classes.send, xs: 1, item: true },
-          createElement(Fab, { color: "primary" }, createElement(SendButton))
+          { container: true, className: classes.textField },
+          createElement(
+            Grid,
+            { item: true, xs: 11 },
+            createElement(TextField, {
+              fullWidth: true,
+              label: "Type something",
+              name: "value",
+              value: props.messageValue,
+              onChange: props.handleChange,
+            })
+          ),
+          createElement(
+            Grid,
+            { className: classes.send, xs: 1, item: true },
+            createElement(
+              Fab,
+              { color: "primary", type: "submit" },
+              createElement(SendButton)
+            )
+          )
         )
       )
     )
