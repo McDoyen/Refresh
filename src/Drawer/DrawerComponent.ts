@@ -1,4 +1,4 @@
-import { createElement, Fragment } from "react";
+import { createElement } from "react";
 
 import {
   BrowserRouter as Router,
@@ -16,48 +16,46 @@ import WeatherIcon from "@material-ui/icons/FilterDramaTwoTone";
 
 import WeatherContainer from "../Weather/WeatherContainer";
 import ChatContainer from "../Chat/ChatContainer";
+import LoginComponent from "../Authentication/Login/LoginComponent";
+import { isLoggedIn } from "../Authentication/Utils";
+import SettingsComponent from "./SettingsComponent";
+import PrivateRoute from "../Authentication/Routes/PrivateRoute";
 
 function DrawerComponent() {
   return createElement(
-    Fragment,
+    Router,
     {},
+    createElement(CssBaseline),
     createElement(
-      Router,
-      {},
-      createElement(CssBaseline),
+      Drawer,
+      { variant: "permanent" },
       createElement(
-        Drawer,
-        { variant: "permanent" },
-        createElement(
-          List,
-          {},
-          createElement(
-            Link,
-            { to: "/weather" },
-            createElement(WeatherIcon, { fontSize: "large" })
-          )
-        ),
+        List,
+        {},
         createElement(
           Link,
-          { to: "/chat" },
-          createElement(ForumIcon, { fontSize: "large" })
+          { to: "/weather" },
+          createElement(WeatherIcon, { fontSize: "large" })
         )
       ),
       createElement(
-        Switch,
-        {},
-        createElement(
-          Route,
-          { exact: true, path: "/" },
-          createElement(Redirect, { to: "/weather" })
-        ),
-        createElement(
-          Route,
-          { path: "/weather" },
-          createElement(WeatherContainer)
-        ),
-        createElement(Route, { path: "/chat" }, createElement(ChatContainer))
-      )
+        Link,
+        { to: isLoggedIn() ? "/chat" : "/login" },
+        createElement(ForumIcon, { fontSize: "large" })
+      ),
+      createElement(SettingsComponent)
+    ),
+    createElement(
+      Switch,
+      {},
+      createElement(
+        Route,
+        { exact: true, path: "/" },
+        createElement(Redirect, { to: "/weather" })
+      ),
+      createElement(Route, { path: "/weather", component: WeatherContainer }),
+      createElement(PrivateRoute, { component: ChatContainer, path: "/chat" }),
+      createElement(Route, { path: "/login", component: LoginComponent })
     )
   );
 }
