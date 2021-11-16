@@ -5,7 +5,7 @@ import { Menu, MenuItem } from "@mui/material";
 import { logout } from "../Authentication/Utils";
 import { useHistory } from "react-router";
 
-function SettingsComponent(props: any) {
+function SettingsComponent() {
   const [anchorEl, setAnchorEl] = useState(null);
   const menuState = Boolean(anchorEl);
   const history = useHistory();

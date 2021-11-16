@@ -43,7 +43,7 @@ function DrawerComponent() {
         { to: isLoggedIn() ? "/chat" : "/login" },
         createElement(ForumIcon, { fontSize: "large" })
       ),
-      createElement(SettingsComponent)
+      createElement(SettingsComponent) // TODO: Fix with state
     ),
     createElement(
       Switch,
