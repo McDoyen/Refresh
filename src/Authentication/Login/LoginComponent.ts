@@ -57,10 +57,10 @@ export default function LoginComponent(props: any) {
         data,
       })
       .then((response) => {
-        const { accessToken, message, userName } = response.data;
+        const { accessToken, message } = response.data;
         if (accessToken) {
-          localStorage.setItem("accessToken", accessToken);
-          props.history.push("/chat", userName);
+          localStorage.setItem("userData", JSON.stringify(response.data));
+          props.history.push("/chat");
         } else {
           setErrorMessage(message);
         }

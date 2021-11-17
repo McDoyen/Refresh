@@ -1,5 +1,6 @@
 import { createElement, useState } from "react";
 
+import { userName } from "../Authentication/Utils";
 import ChatComponent from "./ChatComponent";
 
 interface SyntheticBaseEvent {
@@ -11,7 +12,6 @@ function ChatContainer(props: any) {
   const defaultChat = { data: "", time: "", orientation: "right" as const };
   const [chats, updateChats] = useState([defaultChat]);
   const [messageValue, setMessageValue] = useState("");
-  const userName = props.location.state;
 
   const handleChange = (event: any) => {
     setMessageValue(event.target.value);
@@ -31,7 +31,7 @@ function ChatContainer(props: any) {
   };
 
   return createElement(ChatComponent, {
-    userName,
+    userName, // TODO: Use redux
     chats,
     messageValue,
     handleChange,

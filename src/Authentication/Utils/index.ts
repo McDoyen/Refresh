@@ -1,9 +1,14 @@
+const userData = localStorage.getItem("userData") as string;
+const accessToken = JSON.parse(userData).accessToken;
+
+export const userName = JSON.parse(userData).userName;
+
 export const logout = () => {
-  localStorage.removeItem("accessToken");
+  localStorage.clear();
 };
 
 export const isLoggedIn = () => {
-  if (localStorage.getItem("accessToken")) {
+  if (accessToken) {
     return true;
   }
 
