@@ -1,7 +1,5 @@
 import { createElement, useState } from "react";
 
-// import useLocalStorage from "use-local-storage";
-
 import ChatComponent from "./ChatComponent";
 
 interface SyntheticBaseEvent {
@@ -9,11 +7,11 @@ interface SyntheticBaseEvent {
   preventDefault: () => void;
 }
 
-function ChatContainer() {
+function ChatContainer(props: any) {
   const defaultChat = { data: "", time: "", orientation: "right" as const };
-  // const [test, setTest] = useLocalStorage("chats");
   const [chats, updateChats] = useState([defaultChat]);
   const [messageValue, setMessageValue] = useState("");
+  const userName = props.location.state;
 
   const handleChange = (event: any) => {
     setMessageValue(event.target.value);
@@ -33,6 +31,7 @@ function ChatContainer() {
   };
 
   return createElement(ChatComponent, {
+    userName,
     chats,
     messageValue,
     handleChange,

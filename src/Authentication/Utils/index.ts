@@ -1,13 +1,9 @@
-export const login = () => {
-  localStorage.setItem("TOKEN_KEY", "clear");
-};
-
 export const logout = () => {
-  localStorage.removeItem("TOKEN_KEY");
+  localStorage.removeItem("accessToken");
 };
 
 export const isLoggedIn = () => {
-  if (localStorage.getItem("TOKEN_KEY")) {
+  if (localStorage.getItem("accessToken")) {
     return true;
   }
 

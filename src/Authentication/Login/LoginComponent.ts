@@ -3,7 +3,6 @@ import { ChangeEvent, createElement, useState } from "react";
 import { Button, TextField } from "@mui/material";
 
 import useStyles from "./styles";
-import { login } from "../Utils";
 import axios from "axios";
 
 interface ChangeProps {
@@ -16,6 +15,8 @@ interface ChangeProps {
 
 export default function LoginComponent(props: any) {
   const classes = useStyles();
+  const [errorMessage, setErrorMessage] = useState("");
+  const [signupError, setSignupError] = useState("");
   const [registering, setRegistering] = useState(false);
   const [data, setData] = useState({
     userName: "",
@@ -27,12 +28,14 @@ export default function LoginComponent(props: any) {
   const handleChange = (event: ChangeProps) => {
     event.preventDefault();
     const { name, value } = event.target;
-    console.log(data);
     setData({ ...data, [name]: value });
+    setErrorMessage("");
+    setSignupError("");
   };
 
   const handleSignup = () => {
-    if (registering) {
+    const filled = Object.values(data).every((value) => value.length > 0);
+    if (registering && filled) {
       axios
         .post("http://localhost:8081/signup", {
           data,
@@ -40,23 +43,38 @@ export default function LoginComponent(props: any) {
         .then((response) => console.log(response))
         .catch((error) => console.log(error));
       setRegistering(false);
+    } else if (registering && !filled) {
+      setSignupError("Please fill all requires fields");
     } else {
       setRegistering(true);
     }
   };
 
-  const handleSubmit = (event: ChangeEvent) => {
+  const handleLogin = (event: ChangeEvent) => {
     event.preventDefault();
-    login();
-    props.history.push("/chat");
+    axios
+      .post("http://localhost:8081/login", {
+        data,
+      })
+      .then((response) => {
+        const { accessToken, message, userName } = response.data;
+        if (accessToken) {
+          localStorage.setItem("accessToken", accessToken);
+          props.history.push("/chat", userName);
+        } else {
+          setErrorMessage(message);
+        }
+      })
+      .catch((error) => console.log(`Error: ${error}`));
   };
   return createElement(
     "div",
     { className: classes.container },
     createElement(
       "form",
-      { className: classes.form, onSubmit: handleSubmit },
+      { className: classes.form, onSubmit: handleLogin },
       createElement(TextField, {
+        required: true,
         label: "Username",
         name: "userName",
         value: data.userName,
@@ -65,6 +83,7 @@ export default function LoginComponent(props: any) {
       }),
       registering
         ? createElement(TextField, {
+            required: true,
             label: "Email",
             name: "email",
             value: data.email,
@@ -73,6 +92,8 @@ export default function LoginComponent(props: any) {
           })
         : null,
       createElement(TextField, {
+        required: true,
+        helperText: errorMessage,
         label: "Password",
         name: "password",
         type: "password",
@@ -82,6 +103,8 @@ export default function LoginComponent(props: any) {
       }),
       registering
         ? createElement(TextField, {
+            helperText: signupError,
+            required: true,
             label: "Confirm Password",
             name: "confirmPassword",
             type: "password",
@@ -93,7 +116,7 @@ export default function LoginComponent(props: any) {
       createElement(
         "div",
         {},
-        createElement(Button, { type: "submit" }, "Login"),
+        registering ? null : createElement(Button, { type: "submit" }, "Login"),
         createElement(Button, { onClick: handleSignup }, "Sign up")
       )
     )

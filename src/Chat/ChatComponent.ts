@@ -11,6 +11,7 @@ import useStyles from "./styles";
 import { Divider, Fab, ListItemButton, ListItemText } from "@mui/material";
 
 interface ChatComponentProps {
+  userName: string;
   chats: { data: string; time: string; orientation: string }[];
   messageValue: string;
   handleSubmit: any;
@@ -32,8 +33,8 @@ function ChatComponent(props: ChatComponentProps) {
         createElement(
           ListItemButton,
           {},
-          createElement(People),
-          createElement(ListItemText, { primary: "Paul McDoyen" })
+          createElement(People, { className: classes.displayPhoto }),
+          createElement(ListItemText, { primary: props.userName })
         )
       ),
       createElement(Divider),

@@ -1,6 +1,8 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
+var bcrypt = require("bcryptjs");
+var jwt = require("jsonwebtoken");
 
 const app = express();
 
@@ -21,12 +23,45 @@ app.post("/signup", (request, response) => {
     const newUser = new User({
         userName: request.body.data.userName,
         email: request.body.data.email,
-        password: request.body.data.password,
-        confirmPassword: request.body.data.confirmPassword,
+        password: bcrypt.hashSync(request.body.data.password, 10),
+        confirmPassword: bcrypt.hashSync(request.body.data.confirmPassword, 10),
     });
     User.create(newUser)
-        .then((dbUser) => response.json(dbUser))
+        .then((dbUser) => { response.json(dbUser) })
         .catch((error) => response.json(error));
+});
+
+app.post("/login", (request, response) => {
+    const { userName, password } = request.body.data;
+    User.findOne({ userName }, (error, user) => {
+        if (error) {
+            response.status(500).send({ message: error })
+            return;
+        }
+        if (!user) {
+            return response.send({ message: 'Incorrect username or password' })
+        }
+        if (user) {
+            var passwordIsValid = bcrypt.compareSync(
+                password, user.password
+            )
+            var token = jwt.sign({ id: user._id }, "secret-key", {
+                expiresIn: 86400
+            })
+
+            if (!passwordIsValid) {
+                return response.send({ message: 'Incorrect username or password' })
+            }
+
+            response.status(200).send({
+                id: user._id,
+                userName: user.userName,
+                email: user.email,
+                accessToken: token
+            })
+
+        }
+    });
 });
 
 const PORT = process.env.PORT || 8081;

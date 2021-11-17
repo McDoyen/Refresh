@@ -6,6 +6,9 @@ export default makeStyles((theme) => ({
     height: "100vh",
     paddingLeft: "48px",
   },
+  displayPhoto: {
+    marginRight: "10px",
+  },
   memberSection: {
     borderRight: "1px solid #e0e0e0",
   },

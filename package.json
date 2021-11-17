@@ -17,6 +17,7 @@
     "cors": "^2.8.5",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
+    "formlink": "^1.0.3",
     "jsonwebtoken": "^8.5.1",
     "leaflet": "^1.7.1",
     "mongoose": "^6.0.12",
@@ -30,7 +31,7 @@
     "web-vitals": "^1.1.2"
   },
   "scripts": {
-    "start": "concurrently \"react-scripts start\" \"node server.js\"",
+    "start": "concurrently \"react-scripts start\" \"nodemon server.js\"",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
@@ -51,6 +52,7 @@
     "@types/react": "^17.0.20",
     "@types/react-router-dom": "^5.3.2",
     "@types/use-position": "0.0.0",
+    "nodemon": "^2.0.15",
     "typescript": "^4.4.3"
   }
 }
