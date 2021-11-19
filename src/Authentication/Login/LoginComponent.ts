@@ -5,6 +5,7 @@ import axios from "axios";
 import { useNavigate } from "react-router";
 
 import useStyles from "./styles";
+import { textAlign } from "@mui/system";
 
 interface ChangeProps {
   target: {
@@ -118,7 +119,7 @@ export default function LoginComponent(props: any) {
         : null,
       createElement(
         "div",
-        {},
+        { style: { textAlign: "center" } },
         registering
           ? null
           : createElement(
