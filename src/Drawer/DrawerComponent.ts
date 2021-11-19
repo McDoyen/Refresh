@@ -1,12 +1,6 @@
 import { createElement } from "react";
 
-import {
-  BrowserRouter as Router,
-  Link,
-  Redirect,
-  Route,
-  Switch,
-} from "react-router-dom";
+import { BrowserRouter as Router, Link, Route, Routes } from "react-router-dom";
 
 import CssBaseline from "@mui/material/CssBaseline";
 import Drawer from "@mui/material/Drawer";
@@ -46,16 +40,26 @@ function DrawerComponent() {
       createElement(SettingsComponent) // TODO: Fix with state
     ),
     createElement(
-      Switch,
+      Routes,
       {},
-      createElement(
-        Route,
-        { exact: true, path: "/" },
-        createElement(Redirect, { to: "/weather" })
-      ),
-      createElement(Route, { path: "/weather", component: WeatherContainer }),
-      createElement(PrivateRoute, { component: ChatContainer, path: "/chat" }),
-      createElement(Route, { path: "/login", component: LoginComponent })
+      createElement(Route, {
+        path: "/",
+        element: createElement(WeatherContainer),
+      }),
+      createElement(Route, {
+        path: "/weather",
+        element: createElement(WeatherContainer),
+      }),
+      createElement(Route, {
+        path: "/chat",
+        element: createElement(PrivateRoute, {
+          children: createElement(ChatContainer),
+        }),
+      }),
+      createElement(Route, {
+        path: "/login",
+        element: createElement(LoginComponent),
+      })
     )
   );
 }

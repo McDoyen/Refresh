@@ -3,12 +3,12 @@ import { createElement, Fragment, useState } from "react";
 import SettingsIcon from "@material-ui/icons/Settings";
 import { Menu, MenuItem } from "@mui/material";
 import { logout } from "../Authentication/Utils";
-import { useHistory } from "react-router";
+import { useNavigate } from "react-router";
 
 function SettingsComponent() {
   const [anchorEl, setAnchorEl] = useState(null);
   const menuState = Boolean(anchorEl);
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const handleClick = (event: any) => {
     setAnchorEl(event.currentTarget);
@@ -17,7 +17,7 @@ function SettingsComponent() {
   const handleLogout = () => {
     setAnchorEl(null);
     logout();
-    history.push("/login");
+    navigate("/login");
   };
 
   return createElement(

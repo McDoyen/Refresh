@@ -12,11 +12,11 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-const db = "mongodb://localhost/refresh";
+const db = process.env.DATABASE;
 
 mongoose
     .connect(db, { useNewURLParser: true })
-    .then(() => console.log("db connected"))
+    .then(() => console.log("database initialized"))
     .catch((error) => console.log(error));
 
 const User = require("./models/user");

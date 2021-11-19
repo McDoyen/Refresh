@@ -1,9 +1,10 @@
 import { ChangeEvent, createElement, useState } from "react";
 
 import { Button, TextField } from "@mui/material";
+import axios from "axios";
+import { useNavigate } from "react-router";
 
 import useStyles from "./styles";
-import axios from "axios";
 
 interface ChangeProps {
   target: {
@@ -14,6 +15,7 @@ interface ChangeProps {
 }
 
 export default function LoginComponent(props: any) {
+  let navigate = useNavigate();
   const classes = useStyles();
   const [errorMessage, setErrorMessage] = useState("");
   const [signupError, setSignupError] = useState("");
@@ -60,7 +62,7 @@ export default function LoginComponent(props: any) {
         const { accessToken, message } = response.data;
         if (accessToken) {
           localStorage.setItem("userData", JSON.stringify(response.data));
-          props.history.push("/chat");
+          navigate("/chat");
         } else {
           setErrorMessage(message);
         }
@@ -86,6 +88,7 @@ export default function LoginComponent(props: any) {
             required: true,
             label: "Email",
             name: "email",
+            type: "email",
             value: data.email,
             onChange: handleChange,
             sx: { paddingBottom: "20px" },
@@ -116,8 +119,22 @@ export default function LoginComponent(props: any) {
       createElement(
         "div",
         {},
-        registering ? null : createElement(Button, { type: "submit" }, "Login"),
-        createElement(Button, { onClick: handleSignup }, "Sign up")
+        registering
+          ? null
+          : createElement(
+              Button,
+              {
+                type: "submit",
+                variant: "contained",
+                style: { marginRight: "20px" },
+              },
+              "Login"
+            ),
+        createElement(
+          Button,
+          { onClick: handleSignup, variant: "contained" },
+          "Sign up"
+        )
       )
     )
   );
