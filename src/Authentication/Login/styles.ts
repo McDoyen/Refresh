@@ -2,14 +2,13 @@ import { makeStyles } from "@material-ui/core";
 
 export default makeStyles(() => ({
   container: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
+    position: "absolute",
+    left: "50%",
+    top: "50%",
+    transform: "translate(-50%, -50%)",
   },
   form: {
     display: "flex",
     flexDirection: "column",
-    alignItems: "center",
-    marginTop: "25%",
   },
 }));
