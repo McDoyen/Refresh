@@ -10,10 +10,10 @@ import WeatherIcon from "@material-ui/icons/FilterDramaTwoTone";
 
 import WeatherContainer from "../Weather/WeatherContainer";
 import ChatContainer from "../Chat/ChatContainer";
-import LoginComponent from "../Authentication/Login/LoginComponent";
 import { isLoggedIn } from "../Authentication/Utils";
 import SettingsComponent from "./SettingsComponent";
 import PrivateRoute from "../Authentication/Routes/PrivateRoute";
+import LoginContainer from "../Authentication/Login/LoginContainer";
 
 function DrawerComponent() {
   return createElement(
@@ -58,7 +58,7 @@ function DrawerComponent() {
       }),
       createElement(Route, {
         path: "/login",
-        element: createElement(LoginComponent),
+        element: createElement(LoginContainer),
       })
     )
   );
