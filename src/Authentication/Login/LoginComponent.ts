@@ -5,7 +5,6 @@ import axios from "axios";
 import { useNavigate } from "react-router";
 
 import useStyles from "./styles";
-import { textAlign } from "@mui/system";
 
 interface ChangeProps {
   target: {
