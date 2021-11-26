@@ -8,7 +8,7 @@ interface SyntheticBaseEvent {
   preventDefault: () => void;
 }
 
-function ChatContainer(props: any) {
+function ChatContainer() {
   const defaultChat = { data: "", time: "", orientation: "right" as const };
   const [chats, updateChats] = useState([defaultChat]);
   const [messageValue, setMessageValue] = useState("");
@@ -31,7 +31,7 @@ function ChatContainer(props: any) {
   };
 
   return createElement(ChatComponent, {
-    userName, // TODO: Use redux
+    userName: userName(),
     chats,
     messageValue,
     handleChange,

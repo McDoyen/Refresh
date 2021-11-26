@@ -11,7 +11,7 @@ import useStyles from "./styles";
 import { Divider, Fab, ListItemButton, ListItemText } from "@mui/material";
 
 interface ChatComponentProps {
-  userName: string;
+  userName: any;
   chats: { data: string; time: string; orientation: string }[];
   messageValue: string;
   handleSubmit: any;

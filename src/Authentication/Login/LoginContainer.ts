@@ -12,7 +12,7 @@ interface ChangeProps {
   preventDefault: () => void;
 }
 
-function LoginContainer() {
+function LoginContainer({ setLoggedIn }: any) {
   let navigate = useNavigate();
   const [errorMessage, setErrorMessage] = useState("");
   const [signupError, setSignupError] = useState("");
@@ -56,9 +56,11 @@ function LoginContainer() {
         data,
       })
       .then((response) => {
-        const { accessToken, message } = response.data;
-        if (accessToken) {
-          localStorage.setItem("userData", JSON.stringify(response.data));
+        const { token, message, userName } = response.data;
+        if (token.accessToken) {
+          localStorage.setItem("token", JSON.stringify(token));
+          localStorage.setItem("userName", userName);
+          setLoggedIn(true);
           navigate("/chat");
         } else {
           setErrorMessage(message);

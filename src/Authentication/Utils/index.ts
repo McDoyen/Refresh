@@ -1,16 +1,27 @@
-const userData = localStorage.getItem("userData") as string;
-const accessToken = userData ? JSON.parse(userData).accessToken : "";
+import axios from "axios";
 
-export const userName = userData ? JSON.parse(userData).userName : "";
+const token = localStorage.getItem("token");
+const tokenObject = token ? JSON.parse(token) : null;
+const accessToken = tokenObject ? tokenObject.accessToken : null;
 
 export const logout = () => {
   localStorage.clear();
+  if (accessToken) {
+    axios.delete(`http://localhost:8081/deleteToken/${accessToken}`);
+  }
 };
 
-export const isLoggedIn = () => {
+export const loggedIn = () => {
   if (accessToken) {
     return true;
+  } else {
+    return false;
   }
+};
 
-  return false;
+export const userName = () => {
+  const userName = localStorage.getItem("userName");
+  if (userName) {
+    return userName;
+  }
 };

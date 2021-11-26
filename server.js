@@ -19,6 +19,7 @@ mongoose
     .then(() => console.log("database initialized"))
     .catch((error) => console.log(error));
 
+const Token = require("./models/token");
 const User = require("./models/user");
 
 app.post("/signup", (request, response) => {
@@ -29,7 +30,9 @@ app.post("/signup", (request, response) => {
         confirmPassword: bcrypt.hashSync(request.body.data.confirmPassword, 10),
     });
     User.create(newUser)
-        .then((dbUser) => { response.json(dbUser) })
+        .then((dbUser) => {
+            response.json(dbUser);
+        })
         .catch((error) => response.json(error));
 });
 
@@ -37,33 +40,50 @@ app.post("/login", (request, response) => {
     const { userName, password } = request.body.data;
     User.findOne({ userName }, (error, user) => {
         if (error) {
-            response.status(500).send({ message: error })
+            response.status(500).send({ message: error });
             return;
         }
         if (!user) {
-            return response.send({ message: 'Incorrect username or password' })
+            return response.send({ message: "Incorrect username or password" });
         }
         if (user) {
-            var passwordIsValid = bcrypt.compareSync(
-                password, user.password
-            )
-            var token = jwt.sign({ id: user._id }, "secret-key", {
-                expiresIn: 86400
-            })
+            var passwordIsValid = bcrypt.compareSync(password, user.password);
+            var accessToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+                expiresIn: 86400,
+            });
+            var refreshToken = jwt.sign(
+                { id: user._id },
+                process.env.JWT_REFRESH_TOKEN_SECRET,
+                { expiresIn: 172800 }
+            );
+
+            const newToken = new Token({ userID: user._id, token: refreshToken });
+            Token.create(newToken)
+                .catch((error) => {
+                    console.error(error);
+                });
 
             if (!passwordIsValid) {
-                return response.send({ message: 'Incorrect username or password' })
+                return response.send({ message: "Incorrect username or password" });
             }
 
             response.status(200).send({
                 id: user._id,
                 userName: user.userName,
                 email: user.email,
-                accessToken: token
-            })
-
+                token: {
+                    accessToken,
+                    refreshToken
+                }
+            });
         }
     });
+});
+
+app.delete("/deleteToken/:accessToken", (request, response) => {
+    var accessToken = request.params.accessToken
+
+    Token.deleteOne({ accessToken }).catch(error => console.error(error))
 });
 
 const PORT = process.env.SERVER_PORT || 8081;

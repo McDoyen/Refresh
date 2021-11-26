@@ -1,4 +1,4 @@
-import { createElement } from "react";
+import { createElement, useState } from "react";
 
 import { BrowserRouter as Router, Link, Route, Routes } from "react-router-dom";
 
@@ -10,12 +10,14 @@ import WeatherIcon from "@material-ui/icons/FilterDramaTwoTone";
 
 import WeatherContainer from "../Weather/WeatherContainer";
 import ChatContainer from "../Chat/ChatContainer";
-import { isLoggedIn } from "../Authentication/Utils";
 import SettingsComponent from "./SettingsComponent";
 import PrivateRoute from "../Authentication/Routes/PrivateRoute";
 import LoginContainer from "../Authentication/Login/LoginContainer";
+import { loggedIn } from "../Authentication/Utils";
 
 function DrawerComponent() {
+  const [loggedin, setLoggedIn] = useState(false);
+
   return createElement(
     Router,
     {},
@@ -34,7 +36,7 @@ function DrawerComponent() {
       ),
       createElement(
         Link,
-        { to: isLoggedIn() ? "/chat" : "/login" },
+        { to: loggedIn() || loggedin ? "/chat" : "/login" },
         createElement(ForumIcon, { fontSize: "large" })
       ),
       createElement(SettingsComponent) // TODO: Fix with state
@@ -53,12 +55,13 @@ function DrawerComponent() {
       createElement(Route, {
         path: "/chat",
         element: createElement(PrivateRoute, {
+          loggedin,
           children: createElement(ChatContainer),
         }),
       }),
       createElement(Route, {
         path: "/login",
-        element: createElement(LoginContainer),
+        element: createElement(LoginContainer, { setLoggedIn }),
       })
     )
   );
