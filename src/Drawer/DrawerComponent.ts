@@ -1,4 +1,4 @@
-import { createElement, useState } from "react";
+import { createElement, useEffect, useState } from "react";
 
 import { BrowserRouter as Router, Link, Route, Routes } from "react-router-dom";
 
@@ -17,6 +17,14 @@ import { loggedIn } from "../Authentication/Utils";
 
 function DrawerComponent() {
   const [loggedin, setLoggedIn] = useState(false);
+  const [visibility, setVisibility] = useState(false);
+  useEffect(() => {
+    if (loggedIn() || loggedin) {
+      setVisibility(true);
+    } else {
+      setVisibility(false);
+    }
+  }, [loggedin, loggedIn()]);
 
   return createElement(
     Router,
@@ -39,7 +47,7 @@ function DrawerComponent() {
         { to: loggedIn() || loggedin ? "/chat" : "/login" },
         createElement(ForumIcon, { fontSize: "large" })
       ),
-      createElement(SettingsComponent) // TODO: Fix with state
+      visibility ? createElement(SettingsComponent, { setLoggedIn }) : null
     ),
     createElement(
       Routes,

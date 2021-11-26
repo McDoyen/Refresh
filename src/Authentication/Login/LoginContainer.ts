@@ -57,7 +57,7 @@ function LoginContainer({ setLoggedIn }: any) {
       })
       .then((response) => {
         const { token, message, userName } = response.data;
-        if (token.accessToken) {
+        if (token && token.accessToken) {
           localStorage.setItem("token", JSON.stringify(token));
           localStorage.setItem("userName", userName);
           setLoggedIn(true);
