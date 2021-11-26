@@ -5,7 +5,7 @@ import { Menu, MenuItem } from "@mui/material";
 import { logout } from "../Authentication/Utils";
 import { useNavigate } from "react-router";
 
-function SettingsComponent({ setLoggedIn }: any) {
+function SettingsComponent({ setLoggedIn, setVisibility }: any) {
   const [anchorEl, setAnchorEl] = useState(null);
   const menuState = Boolean(anchorEl);
   const navigate = useNavigate();
@@ -18,6 +18,7 @@ function SettingsComponent({ setLoggedIn }: any) {
     setAnchorEl(null);
     logout();
     setLoggedIn(false);
+    setVisibility(false);
     navigate("/login");
   };
 

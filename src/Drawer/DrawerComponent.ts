@@ -47,7 +47,9 @@ function DrawerComponent() {
         { to: loggedIn() || loggedin ? "/chat" : "/login" },
         createElement(ForumIcon, { fontSize: "large" })
       ),
-      visibility ? createElement(SettingsComponent, { setLoggedIn }) : null
+      visibility
+        ? createElement(SettingsComponent, { setLoggedIn, setVisibility })
+        : null
     ),
     createElement(
       Routes,
