@@ -12,7 +12,7 @@ import { Divider, Fab, ListItemButton, ListItemText } from "@mui/material";
 
 interface ChatComponentProps {
   userName: any;
-  chats: { data: string; time: string; orientation: string }[];
+  chats: any;
   messageValue: string;
   handleSubmit: any;
   handleChange: any;
@@ -20,6 +20,7 @@ interface ChatComponentProps {
 
 function ChatComponent(props: ChatComponentProps) {
   const classes = useStyles();
+  let messages = props.chats;
 
   return createElement(
     Grid,
@@ -92,30 +93,31 @@ function ChatComponent(props: ChatComponentProps) {
       createElement(
         List,
         {},
-        props.chats.map(
-          (
-            chat: { orientation: any; data: string; time: any },
-            index: number
-          ) =>
-            createElement(
-              ListItem,
-              { key: index },
+        messages &&
+          messages.map(
+            (
+              chat: { orientation: any; data: string; time: any },
+              index: number
+            ) =>
               createElement(
-                Grid,
-                { container: true },
+                ListItem,
+                { key: index },
                 createElement(
                   Grid,
-                  {
-                    item: true,
-                    xs: 12,
-                    style: { textAlign: chat.orientation },
-                  },
-                  createElement(ListItemText, { primary: chat.data }),
-                  createElement(ListItemText, { secondary: chat.time })
+                  { container: true },
+                  createElement(
+                    Grid,
+                    {
+                      item: true,
+                      xs: 12,
+                      style: { textAlign: chat.orientation },
+                    },
+                    createElement(ListItemText, { primary: chat.data }),
+                    createElement(ListItemText, { secondary: chat.time })
+                  )
                 )
               )
-            )
-        )
+          )
       ),
       createElement(Divider),
       createElement(

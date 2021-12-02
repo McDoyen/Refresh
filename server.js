@@ -21,6 +21,7 @@ mongoose
 
 const Token = require("./models/token");
 const User = require("./models/user");
+const Chat = require("./models/chat");
 
 app.post("/signup", (request, response) => {
     const newUser = new User({
@@ -85,6 +86,27 @@ app.delete("/deleteToken/:accessToken", (request, response) => {
 
     Token.deleteOne({ accessToken }).catch(error => console.error(error))
 });
+
+app.post("/addMessage", (request, response) => {
+    const { data, time, orientation } = request.body.newChat;
+    const newMessage = new Chat({
+        data,
+        time,
+        orientation
+    });
+    Chat.create(newMessage)
+        .then((dbmessage) => {
+            response.json(dbmessage);
+        })
+        .catch((error) => response.json(error));
+})
+
+app.get("/retrieveMessages", (request, response) => {
+    Chat.find({}, { _id: 0, data: 1, time: 1, orientation: 1 }).then((chats) => {
+        response.send(chats);
+    })
+        .catch((error) => response.json(error));
+})
 
 const PORT = process.env.SERVER_PORT || 8081;
 app.listen(PORT, () => {
