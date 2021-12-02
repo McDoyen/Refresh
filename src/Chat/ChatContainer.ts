@@ -4,7 +4,6 @@ import { createElement, useEffect, useState } from "react";
 import { userName } from "../Authentication/Utils";
 import ChatComponent from "./ChatComponent";
 import Cookies from "js-cookie";
-import { LocalConvenienceStoreOutlined } from "@material-ui/icons";
 
 interface SyntheticBaseEvent {
   target: { value: string }[];
@@ -15,15 +14,21 @@ function ChatContainer() {
   const [chats, updateChats] = useState([]);
   const [messageValue, setMessageValue] = useState("");
   const [fetching, setFetching] = useState(true);
+  const [users, setUsers] = useState([]);
 
   useEffect(() => {
     axios
       .get("http://localhost:8081/retrieveMessages")
-      .then((response) => {
-        updateChats(response.data);
+      .then(({ data }) => {
+        updateChats(data);
         setFetching(false);
       })
       .catch((error) => console.error(error));
+
+    axios.get("http://localhost:8081/retrieveUsers").then(({ data }) => {
+      setUsers(data);
+      setFetching(false);
+    });
   }, []);
 
   const handleChange = (event: any) => {
@@ -51,6 +56,7 @@ function ChatContainer() {
   return fetching
     ? createElement("p", {}, "Skeleton")
     : createElement(ChatComponent, {
+        users,
         userName: userName(),
         chats,
         messageValue,

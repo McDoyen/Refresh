@@ -13,6 +13,7 @@ import useStyles from "./styles";
 import { Divider, Fab, ListItemButton, ListItemText } from "@mui/material";
 
 interface ChatComponentProps {
+  users: any;
   userName: any;
   chats: MessageProps[];
   messageValue: string;
@@ -29,6 +30,7 @@ interface MessageProps {
 function ChatComponent(props: ChatComponentProps) {
   const classes = useStyles();
   let messages = props.chats;
+  let users = props.users;
   let username =
     props.userName.charAt(0).toUpperCase() + props.userName.slice(1);
   const userID = Cookies.get("userID");
@@ -62,40 +64,19 @@ function ChatComponent(props: ChatComponentProps) {
       createElement(
         List,
         {},
-        createElement(
-          ListItemButton,
-          {},
-          createElement(People),
-          createElement(
-            ListItemText,
-            { primary: "Paul McDoyen" },
-            "Paul McDoyen"
-          ),
-          createElement(ListItemText, {
-            className: classes.onlineBanner,
-            secondary: "online",
-          })
-        ),
-        createElement(
-          ListItemButton,
-          {},
-          createElement(People),
-          createElement(
-            ListItemText,
-            { primary: "Paul McDoyen" },
-            "Paul McDoyen"
-          )
-        ),
-        createElement(
-          ListItemButton,
-          {},
-          createElement(People),
-          createElement(
-            ListItemText,
-            { primary: "Paul McDoyen" },
-            "Paul McDoyen"
-          )
-        )
+        users.map(({ userName }: any, index: number) => {
+          let username = userName.charAt(0).toUpperCase() + userName.slice(1);
+          return createElement(
+            ListItemButton,
+            { key: index },
+            createElement(People, { className: classes.displayPhoto }),
+            createElement(ListItemText, { primary: username }),
+            createElement(ListItemText, {
+              className: classes.onlineBanner,
+              secondary: "online",
+            })
+          );
+        })
       )
     ),
     createElement(

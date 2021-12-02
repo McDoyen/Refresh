@@ -108,6 +108,10 @@ app.get("/retrieveMessages", (request, response) => {
         .catch((error) => response.json(error));
 })
 
+app.get("/retrieveUsers", (request, response) => {
+    User.find({}, { _id: 0, userName: 1 }).then(users => { response.send(users) }).catch(error => response.json(error))
+})
+
 const PORT = process.env.SERVER_PORT || 8081;
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}.`);
