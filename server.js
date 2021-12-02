@@ -88,8 +88,9 @@ app.delete("/deleteToken/:accessToken", (request, response) => {
 });
 
 app.post("/addMessage", (request, response) => {
-    const { data, time, orientation } = request.body.newChat;
+    const { userID, data, time, orientation } = request.body.newChat;
     const newMessage = new Chat({
+        userID,
         data,
         time,
         orientation
@@ -102,7 +103,7 @@ app.post("/addMessage", (request, response) => {
 })
 
 app.get("/retrieveMessages", (request, response) => {
-    Chat.find({}, { _id: 0, data: 1, time: 1, orientation: 1 }).then((chats) => {
+    Chat.find({}, { _id: 0, userID: 1, data: 1, time: 1, orientation: 1 }).then((chats) => {
         response.send(chats);
     })
         .catch((error) => response.json(error));

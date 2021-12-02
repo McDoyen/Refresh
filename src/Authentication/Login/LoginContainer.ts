@@ -57,10 +57,12 @@ function LoginContainer({ setLoggedIn }: any) {
         data,
       })
       .then((response) => {
-        const { token, message, userName } = response.data;
+        const { id, token, message, userName } = response.data;
+        console.log(response.data);
         if (token && token.accessToken) {
           Cookies.set("token", JSON.stringify(token));
           Cookies.set("userName", userName);
+          Cookies.set("userID", id);
           setLoggedIn(true);
           navigate("/chat");
         } else {

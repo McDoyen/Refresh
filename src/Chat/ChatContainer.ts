@@ -3,6 +3,7 @@ import { createElement, useEffect, useState } from "react";
 
 import { userName } from "../Authentication/Utils";
 import ChatComponent from "./ChatComponent";
+import Cookies from "js-cookie";
 
 interface SyntheticBaseEvent {
   target: { value: string }[];
@@ -22,7 +23,7 @@ function ChatContainer() {
         setFetching(false);
       })
       .catch((error) => console.error(error));
-  }, [chats]);
+  });
 
   const handleChange = (event: any) => {
     setMessageValue(event.target.value);
@@ -33,6 +34,7 @@ function ChatContainer() {
     let data = event.target[0].value;
     if (data) {
       const newChat = {
+        userID: Cookies.get("userID"),
         data,
         time: new Date().toLocaleTimeString(),
         orientation: "right" as const,
