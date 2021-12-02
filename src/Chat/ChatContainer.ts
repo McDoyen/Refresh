@@ -37,7 +37,6 @@ function ChatContainer() {
         userID: Cookies.get("userID"),
         data,
         time: new Date().toLocaleTimeString(),
-        orientation: "right" as const,
       };
       updateChats((oldChats): any => [...oldChats, newChat]);
 

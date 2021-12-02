@@ -1,5 +1,7 @@
 import { createElement } from "react";
 
+import Cookies from "js-cookie";
+
 import Grid from "@mui/material/Grid";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
@@ -23,6 +25,7 @@ function ChatComponent(props: ChatComponentProps) {
   let messages = props.chats;
   let username =
     props.userName.charAt(0).toUpperCase() + props.userName.slice(1);
+  const userID = Cookies.get("userID");
 
   return createElement(
     Grid,
@@ -98,7 +101,11 @@ function ChatComponent(props: ChatComponentProps) {
         messages &&
           messages.map(
             (
-              chat: { orientation: any; data: string; time: any },
+              chat: {
+                userID: string;
+                data: string;
+                time: any;
+              },
               index: number
             ) =>
               createElement(
@@ -112,7 +119,9 @@ function ChatComponent(props: ChatComponentProps) {
                     {
                       item: true,
                       xs: 12,
-                      style: { textAlign: chat.orientation },
+                      style: {
+                        textAlign: userID === chat.userID ? "right" : "left",
+                      },
                     },
                     createElement(ListItemText, { primary: chat.data }),
                     createElement(ListItemText, { secondary: chat.time })
