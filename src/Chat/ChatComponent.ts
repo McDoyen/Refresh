@@ -21,6 +21,8 @@ interface ChatComponentProps {
 function ChatComponent(props: ChatComponentProps) {
   const classes = useStyles();
   let messages = props.chats;
+  let username =
+    props.userName.charAt(0).toUpperCase() + props.userName.slice(1);
 
   return createElement(
     Grid,
@@ -35,7 +37,7 @@ function ChatComponent(props: ChatComponentProps) {
           ListItemButton,
           {},
           createElement(People, { className: classes.displayPhoto }),
-          createElement(ListItemText, { primary: props.userName })
+          createElement(ListItemText, { primary: username })
         )
       ),
       createElement(Divider),
