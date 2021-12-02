@@ -4,6 +4,7 @@ import { createElement, useEffect, useState } from "react";
 import { userName } from "../Authentication/Utils";
 import ChatComponent from "./ChatComponent";
 import Cookies from "js-cookie";
+import { LocalConvenienceStoreOutlined } from "@material-ui/icons";
 
 interface SyntheticBaseEvent {
   target: { value: string }[];
@@ -23,7 +24,7 @@ function ChatContainer() {
         setFetching(false);
       })
       .catch((error) => console.error(error));
-  });
+  }, []);
 
   const handleChange = (event: any) => {
     setMessageValue(event.target.value);
@@ -39,7 +40,6 @@ function ChatContainer() {
         time: new Date().toLocaleTimeString(),
       };
       updateChats((oldChats): any => [...oldChats, newChat]);
-
       axios
         .post("http://localhost:8081/addMessage", { newChat })
         .catch((error) => console.error(error));
