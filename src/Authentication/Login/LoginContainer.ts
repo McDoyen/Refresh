@@ -3,6 +3,7 @@ import { ChangeEvent, createElement, useState } from "react";
 import LoginComponent from "./LoginComponent";
 import axios from "axios";
 import { useNavigate } from "react-router";
+import Cookies from "js-cookie";
 
 interface ChangeProps {
   target: {
@@ -58,8 +59,8 @@ function LoginContainer({ setLoggedIn }: any) {
       .then((response) => {
         const { token, message, userName } = response.data;
         if (token && token.accessToken) {
-          localStorage.setItem("token", JSON.stringify(token));
-          localStorage.setItem("userName", userName);
+          Cookies.set("token", JSON.stringify(token));
+          Cookies.set("userName", userName);
           setLoggedIn(true);
           navigate("/chat");
         } else {
