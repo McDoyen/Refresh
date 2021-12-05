@@ -1,6 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
+const multer = require("multer");
 var bcrypt = require("bcryptjs");
 var jwt = require("jsonwebtoken");
 
@@ -23,12 +24,18 @@ const Token = require("./models/token");
 const User = require("./models/user");
 const Chat = require("./models/chat");
 
-app.post("/signup", (request, response) => {
+const dir = "./public/profile_pictures/"
+
+var uploaded = multer({ dest: dir });
+
+app.post("/signup", uploaded.single("pic"), (request, response) => {
+    const url = `${request.protocol}://${request.get("host")}`
     const newUser = new User({
-        userName: request.body.data.userName,
-        email: request.body.data.email,
-        password: bcrypt.hashSync(request.body.data.password, 10),
-        confirmPassword: bcrypt.hashSync(request.body.data.confirmPassword, 10),
+        userName: request.body.userName,
+        email: request.body.email,
+        password: bcrypt.hashSync(request.body.password, 10),
+        confirmPassword: bcrypt.hashSync(request.body.confirmPassword, 10),
+        profilePicture: `${url}${dir}${request.file.originalname}`
     });
     User.create(newUser)
         .then((dbUser) => {
@@ -38,7 +45,7 @@ app.post("/signup", (request, response) => {
 });
 
 app.post("/login", (request, response) => {
-    const { userName, password } = request.body.data;
+    const { userName, password } = request.body;
     User.findOne({ userName }, (error, user) => {
         if (error) {
             response.status(500).send({ message: error });

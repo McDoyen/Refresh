@@ -3,18 +3,20 @@ import Cookies from "js-cookie";
 
 const token = Cookies.get("token");
 const tokenObject = token ? JSON.parse(token) : null;
-const accessToken = tokenObject ? tokenObject.accessToken : null;
 
 export const logout = () => {
   Cookies.remove("token");
   Cookies.remove("userName");
-  if (accessToken) {
-    axios.delete(`http://localhost:8081/deleteToken/${accessToken}`);
+  Cookies.remove("userID");
+  if (tokenObject) {
+    axios
+      .delete(`http://localhost:8081/deleteToken/${tokenObject.accessToken}`)
+      .catch((error) => console.error(error));
   }
 };
 
 export const loggedIn = () => {
-  if (accessToken) {
+  if (token) {
     return true;
   } else {
     return false;

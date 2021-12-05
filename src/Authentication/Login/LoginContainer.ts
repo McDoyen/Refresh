@@ -9,6 +9,7 @@ interface ChangeProps {
   target: {
     name: string;
     value: string;
+    files: any;
   };
   preventDefault: () => void;
 }
@@ -23,24 +24,35 @@ function LoginContainer({ setLoggedIn }: any) {
     email: "",
     password: "",
     confirmPassword: "",
+    profilePicture: "",
   });
 
   const handleChange = (event: ChangeProps) => {
     event.preventDefault();
-    const { name, value } = event.target;
-    setData({ ...data, [name]: value });
+    var { name, value, files } = event.target;
+
+    if (files) {
+      setData({ ...data, [name]: files[0] });
+    } else {
+      setData({ ...data, [name]: value });
+    }
     setErrorMessage("");
     setSignupError("");
   };
 
   const handleSignup = () => {
-    const filled = Object.values(data).every((value) => value.length > 0);
+    const filled = Object.values(data)
+      .slice(0, 1)
+      .every((value) => value.length > 0);
     if (registering && filled) {
+      const file = new FormData();
+      file.append("userName", data.userName);
+      file.append("email", data.email);
+      file.append("password", data.password);
+      file.append("confirmPassword", data.confirmPassword);
+      file.append("pic", data.profilePicture);
       axios
-        .post("http://localhost:8081/signup", {
-          data,
-        })
-        .then((response) => console.log(response))
+        .post("http://localhost:8081/signup", file)
         .catch((error) => console.log(error));
       setRegistering(false);
     } else if (registering && !filled) {
@@ -53,12 +65,9 @@ function LoginContainer({ setLoggedIn }: any) {
   const handleLogin = (event: ChangeEvent) => {
     event.preventDefault();
     axios
-      .post("http://localhost:8081/login", {
-        data,
-      })
+      .post("http://localhost:8081/login", data)
       .then((response) => {
         const { id, token, message, userName } = response.data;
-        console.log(response.data);
         if (token && token.accessToken) {
           Cookies.set("token", JSON.stringify(token));
           Cookies.set("userName", userName);

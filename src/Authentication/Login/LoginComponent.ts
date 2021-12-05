@@ -1,4 +1,4 @@
-import { createElement } from "react";
+import { createElement, Fragment } from "react";
 
 import { Button, TextField } from "@mui/material";
 
@@ -12,7 +12,10 @@ export default function LoginComponent(props: any) {
     { className: classes.container },
     createElement(
       "form",
-      { className: classes.form, onSubmit: props.handleLogin },
+      {
+        className: classes.form,
+        onSubmit: props.handleLogin,
+      },
       createElement(TextField, {
         required: true,
         label: "Username",
@@ -43,16 +46,43 @@ export default function LoginComponent(props: any) {
         sx: { paddingBottom: "20px" },
       }),
       props.registering
-        ? createElement(TextField, {
-            helperText: props.signupError,
-            required: true,
-            label: "Confirm Password",
-            name: "confirmPassword",
-            type: "password",
-            value: props.data.confirmPassword,
-            onChange: props.handleChange,
-            sx: { paddingBottom: "20px" },
-          })
+        ? createElement(
+            Fragment,
+            {},
+            createElement(TextField, {
+              helperText: props.signupError,
+              required: true,
+              label: "Confirm Password",
+              name: "confirmPassword",
+              type: "password",
+              value: props.data.confirmPassword,
+              onChange: props.handleChange,
+              sx: { paddingBottom: "20px" },
+            }),
+            createElement(
+              "label",
+              { htmlFor: "upload-button" },
+              createElement("input", {
+                accept: "image/*",
+                id: "upload-button",
+                type: "file",
+                style: { display: "none" },
+                onChange: props.handleChange,
+              }),
+              createElement(
+                Button,
+                {
+                  fullWidth: true,
+                  variant: "outlined",
+                  // @ts-ignore
+                  component: "span",
+                  size: "large",
+                  style: { marginBottom: "15px" },
+                },
+                "Upload Picture"
+              )
+            )
+          )
         : null,
       createElement(
         "div",
