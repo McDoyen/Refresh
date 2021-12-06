@@ -45,12 +45,14 @@ function LoginContainer({ setLoggedIn }: any) {
       .slice(0, 1)
       .every((value) => value.length > 0);
     if (registering && filled) {
+      const { userName, email, password, confirmPassword, profilePicture } =
+        data;
       const file = new FormData();
-      file.append("userName", data.userName);
-      file.append("email", data.email);
-      file.append("password", data.password);
-      file.append("confirmPassword", data.confirmPassword);
-      file.append("pic", data.profilePicture);
+      file.append("userName", userName);
+      file.append("email", email);
+      file.append("password", password);
+      file.append("confirmPassword", confirmPassword);
+      file.append("pic", profilePicture);
       axios
         .post("http://localhost:8081/signup", file)
         .catch((error) => console.log(error));

@@ -18,7 +18,7 @@ const db = process.env.DATABASE;
 mongoose
     .connect(db, { useNewURLParser: true })
     .then(() => console.log("database initialized"))
-    .catch((error) => console.log(error));
+    .catch((error) => console.log(`Oopps ${error}`));
 
 const Token = require("./models/token");
 const User = require("./models/user");
@@ -48,7 +48,7 @@ app.post("/login", (request, response) => {
     const { userName, password } = request.body;
     User.findOne({ userName }, (error, user) => {
         if (error) {
-            response.status(500).send({ message: error });
+            response.send(error);
             return;
         }
         if (!user) {

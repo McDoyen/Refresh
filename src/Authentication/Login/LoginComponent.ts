@@ -65,6 +65,7 @@ export default function LoginComponent(props: any) {
               createElement("input", {
                 accept: "image/*",
                 id: "upload-button",
+                name: "profilePicture",
                 type: "file",
                 style: { display: "none" },
                 onChange: props.handleChange,
