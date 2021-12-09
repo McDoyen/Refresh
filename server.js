@@ -24,9 +24,19 @@ const Token = require('./models/token');
 const User = require('./models/user');
 const Chat = require('./models/chat');
 
-const dir = './public/profile_pictures/';
+const directory = './public/profile_pictures/';
 
-var uploaded = multer({ dest: dir });
+const storage = multer.diskStorage({
+    destination: (request, file, callback) => {
+        callback(null, directory);
+    },
+    filename: (request, file, callback) => {
+        const uniqueSuffix = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
+        callback(null, `${uniqueSuffix} - ${file.originalname}`);
+    }
+});
+
+const uploaded = multer({ storage });
 
 app.post('/signup', uploaded.single('pic'), (request, response) => {
     const url = `${request.protocol}://${request.get('host')}`;
@@ -35,7 +45,7 @@ app.post('/signup', uploaded.single('pic'), (request, response) => {
         email: request.body.email,
         password: bcrypt.hashSync(request.body.password, 10),
         confirmPassword: bcrypt.hashSync(request.body.confirmPassword, 10),
-        profilePicture: `${url}${dir}${request.file.originalname}`
+        profilePicture: `${url}${directory}${request.file.originalname}`
     });
     User.create(newUser)
         .then((dbUser) => {
