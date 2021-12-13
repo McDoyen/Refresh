@@ -33,3 +33,12 @@ export const userName = () => {
 
     return '';
 };
+
+export const profilePicture = () => {
+    const profilepicture = Cookies.get('profilePicture');
+    if (profilepicture) {
+        return profilepicture;
+    }
+
+    return '';
+};

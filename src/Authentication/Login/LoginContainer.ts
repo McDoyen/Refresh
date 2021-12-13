@@ -74,10 +74,13 @@ function LoginContainer({ setLoggedIn }: any) {
         axios
             .post('http://localhost:8081/login', data)
             .then((response) => {
-                const { id, token, message, userName } = response.data;
+                console.log(response.data.profilePicture);
+                const { id, token, message, userName, profilePicture } =
+                    response.data;
                 if (token && token.accessToken) {
                     Cookies.set('token', JSON.stringify(token));
                     Cookies.set('userName', userName);
+                    Cookies.set('profilePicture', profilePicture);
                     Cookies.set('userID', id);
                     setLoggedIn(true);
                     navigate('/chat');

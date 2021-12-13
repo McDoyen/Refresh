@@ -2,7 +2,8 @@ import axios from 'axios';
 import { createElement, useEffect, useState } from 'react';
 
 import Cookies from 'js-cookie';
-import { userName } from '../Authentication/Utils';
+import { profilePicture, userName } from '../Authentication/Utils';
+// eslint-disable-next-line import/no-named-as-default
 import ChatComponent from './ChatComponent';
 
 interface SyntheticBaseEvent {
@@ -58,6 +59,7 @@ function ChatContainer() {
         : createElement(ChatComponent, {
               users,
               userName: userName(),
+              profilePicture: profilePicture(),
               chats,
               messageValue,
               handleChange,

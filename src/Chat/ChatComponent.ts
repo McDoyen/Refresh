@@ -9,8 +9,15 @@ import People from '@material-ui/icons/People';
 import SendButton from '@material-ui/icons/Send';
 import TextField from '@mui/material/TextField';
 
-import { Divider, Fab, ListItemButton, ListItemText } from '@mui/material';
+import {
+    Avatar,
+    Divider,
+    Fab,
+    ListItemButton,
+    ListItemText
+} from '@mui/material';
 import useStyles from './styles';
+import { StyledBadge } from './StyledBadgeComponent';
 
 interface ChatComponentProps {
     users: any;
@@ -19,6 +26,7 @@ interface ChatComponentProps {
     messageValue: string;
     handleSubmit: any;
     handleChange: any;
+    profilePicture: string;
 }
 
 interface MessageProps {
@@ -29,8 +37,15 @@ interface MessageProps {
 
 function ChatComponent(props: ChatComponentProps) {
     const classes = useStyles();
-    const { chats, users, userName, handleSubmit, messageValue, handleChange } =
-        props;
+    const {
+        chats,
+        users,
+        userName,
+        profilePicture,
+        handleSubmit,
+        messageValue,
+        handleChange
+    } = props;
     const messages = chats;
     const username = userName.charAt(0).toUpperCase() + userName.slice(1);
     const userID = Cookies.get('userID');
@@ -47,8 +62,31 @@ function ChatComponent(props: ChatComponentProps) {
                 createElement(
                     ListItemButton,
                     {},
-                    createElement(People, { className: classes.displayPhoto }),
-                    createElement(ListItemText, { primary: username })
+                    createElement(
+                        StyledBadge,
+                        {
+                            overlap: 'circular',
+                            anchorOrigin: {
+                                vertical: 'bottom',
+                                horizontal: 'right'
+                            },
+                            variant: 'dot'
+                        },
+                        createElement(Avatar, {
+                            alt: userName,
+                            // @ts-ignore
+                            src: { profilePicture },
+                            variant: 'rounded'
+                        })
+                    ),
+                    createElement(ListItemText, {
+                        primary: username,
+                        sx: {
+                            position: 'absolute',
+                            bottom: 0,
+                            left: '60px'
+                        }
+                    })
                 )
             ),
             createElement(Divider),

@@ -1,9 +1,11 @@
+/* eslint-disable no-underscore-dangle */
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const multer = require('multer');
-var bcrypt = require('bcryptjs');
-var jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const path = require('path');
 
 require('dotenv').config();
 
@@ -12,6 +14,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use('/public/profile_pictures', express.static('public/profile_pictures'));
 
 const db = process.env.DATABASE;
 
@@ -24,28 +27,28 @@ const Token = require('./models/token');
 const User = require('./models/user');
 const Chat = require('./models/chat');
 
-const directory = './public/profile_pictures/';
+const directory = 'public/profile_pictures/';
 
 const storage = multer.diskStorage({
     destination: (request, file, callback) => {
         callback(null, directory);
     },
     filename: (request, file, callback) => {
-        const uniqueSuffix = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
-        callback(null, `${uniqueSuffix} - ${file.originalname}`);
+        const name = file.originalname;
+        const fileName = `${name.split('.')[0].trim()}${path.extname(name)}`;
+        callback(null, fileName);
     }
 });
 
-const uploaded = multer({ storage });
+const upload = multer({ storage });
 
-app.post('/signup', uploaded.single('pic'), (request, response) => {
-    const url = `${request.protocol}://${request.get('host')}`;
+app.post('/signup', upload.single('pic'), (request, response) => {
     const newUser = new User({
         userName: request.body.userName,
         email: request.body.email,
         password: bcrypt.hashSync(request.body.password, 10),
         confirmPassword: bcrypt.hashSync(request.body.confirmPassword, 10),
-        profilePicture: `${url}${directory}${request.file.originalname}`
+        profilePicture: request.file.path
     });
     User.create(newUser)
         .then((dbUser) => {
@@ -62,18 +65,18 @@ app.post('/login', (request, response) => {
             return;
         }
         if (!user) {
-            return response.send({ message: 'Incorrect username or password' });
+            response.send({ message: userName });
         }
         if (user) {
-            var passwordIsValid = bcrypt.compareSync(password, user.password);
-            var accessToken = jwt.sign(
+            const passwordIsValid = bcrypt.compareSync(password, user.password);
+            const accessToken = jwt.sign(
                 { id: user._id },
                 process.env.JWT_SECRET,
                 {
                     expiresIn: 86400
                 }
             );
-            var refreshToken = jwt.sign(
+            const refreshToken = jwt.sign(
                 { id: user._id },
                 process.env.JWT_REFRESH_TOKEN_SECRET,
                 { expiresIn: 172800 }
@@ -83,20 +86,21 @@ app.post('/login', (request, response) => {
                 userID: user._id,
                 token: refreshToken
             });
-            Token.create(newToken).catch((error) => {
-                console.error(error);
+            Token.create(newToken).catch((tokenError) => {
+                console.error(tokenError);
             });
 
             if (!passwordIsValid) {
-                return response.send({
+                response.send({
                     message: 'Incorrect username or password'
                 });
             }
-
+            console.log(user.profilePicture);
             response.status(200).send({
                 id: user._id,
                 userName: user.userName,
                 email: user.email,
+                profilePicture: user.profilePicture,
                 token: {
                     accessToken,
                     refreshToken
@@ -106,8 +110,8 @@ app.post('/login', (request, response) => {
     });
 });
 
-app.delete('/deleteToken/:accessToken', (request, response) => {
-    var accessToken = request.params.accessToken;
+app.delete('/deleteToken/:accessToken', (request) => {
+    const { accessToken } = request.params;
 
     Token.deleteOne({ accessToken }).catch((error) => console.error(error));
 });
