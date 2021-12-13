@@ -5,6 +5,7 @@ import Cookies from 'js-cookie';
 import { profilePicture, userName } from '../Authentication/Utils';
 // eslint-disable-next-line import/no-named-as-default
 import ChatComponent from './ChatComponent';
+import SkeletonComponent from './SkeletonComponent';
 
 interface SyntheticBaseEvent {
     target: { value: string }[];
@@ -55,7 +56,7 @@ function ChatContainer() {
     };
 
     return fetching
-        ? createElement('p', {}, 'Skeleton')
+        ? createElement(SkeletonComponent)
         : createElement(ChatComponent, {
               users,
               userName: userName(),
