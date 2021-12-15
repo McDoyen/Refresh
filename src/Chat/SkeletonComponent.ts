@@ -18,7 +18,7 @@ function SkeletonComponent() {
 
     return createElement(
         Grid,
-        { container: true, className: classes.chatSection },
+        { container: true, className: classes.main },
         createElement(
             Grid,
             { item: true, xs: 3, className: classes.memberSection },
@@ -81,14 +81,14 @@ function SkeletonComponent() {
         ),
         createElement(
             Grid,
-            { item: true, xs: 9, className: classes.messageArea },
+            { item: true, xs: 9 },
             createElement(Divider),
             createElement(
                 'form',
                 {},
                 createElement(
                     Grid,
-                    { container: true, className: classes.textField },
+                    { container: true },
                     createElement(
                         Grid,
                         { item: true, xs: 11 },
