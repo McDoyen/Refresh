@@ -55,7 +55,7 @@ function ChatComponent(props: ChatComponentProps) {
         { className: classes.main },
         createElement(
             'div',
-            { style: { width: '100%', position: 'relative', height: '100vh' } },
+            { className: classes.container },
             createElement(
                 'div',
                 { className: classes.memberSection },
@@ -184,7 +184,7 @@ function ChatComponent(props: ChatComponentProps) {
                     { onSubmit: handleSubmit },
                     createElement(
                         'div',
-                        { style: { display: 'flex', padding: '1%' } },
+                        { className: classes.form },
                         createElement(TextField, {
                             fullWidth: true,
                             label: 'Type something',

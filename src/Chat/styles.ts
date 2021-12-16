@@ -6,6 +6,7 @@ export default makeStyles(() => ({
         display: 'flex',
         height: '100vh'
     },
+    container: { width: '100%', position: 'relative', height: '100vh' },
     displayPhoto: {
         marginRight: '10px'
     },
@@ -29,5 +30,6 @@ export default makeStyles(() => ({
         marginLeft: '10px'
     },
     textMessage: { textAlign: 'right' },
-    send: { paddingLeft: '10px' }
+    send: { paddingLeft: '10px' },
+    form: { display: 'flex', padding: '1%' }
 }));

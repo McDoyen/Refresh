@@ -1,7 +1,6 @@
 import {
     Avatar,
     Divider,
-    Fab,
     Grid,
     List,
     ListItemButton,
@@ -17,48 +16,17 @@ function SkeletonComponent() {
     const users = ['.', '.', '.'];
 
     return createElement(
-        Grid,
-        { container: true, className: classes.main },
+        'div',
+        { className: classes.main },
         createElement(
-            Grid,
-            { item: true, xs: 3, className: classes.memberSection },
+            'div',
+            { className: classes.container },
             createElement(
-                List,
-                {},
+                'div',
+                { className: classes.memberSection },
                 createElement(
-                    ListItemButton,
+                    List,
                     {},
-                    createElement(
-                        Skeleton,
-                        {},
-                        createElement(Avatar, {
-                            variant: 'rounded'
-                        })
-                    ),
-                    createElement(
-                        Skeleton,
-                        { width: '100%' },
-                        createElement(Typography, {}, '.')
-                    )
-                )
-            ),
-            createElement(Divider),
-            createElement(
-                Grid,
-                { item: true, xs: 12, style: { padding: '10px' } },
-                createElement(
-                    Skeleton,
-                    {},
-                    createElement(TextField, {
-                        fullWidth: true
-                    })
-                )
-            ),
-            createElement(Divider),
-            createElement(
-                List,
-                {},
-                users.map((user) =>
                     createElement(
                         ListItemButton,
                         {},
@@ -66,45 +34,49 @@ function SkeletonComponent() {
                             Skeleton,
                             {},
                             createElement(Avatar, {
-                                className: classes.displayPhoto,
                                 variant: 'rounded'
                             })
                         ),
                         createElement(
                             Skeleton,
                             { width: '100%' },
-                            createElement(Typography, {}, user)
-                        )
-                    )
-                )
-            )
-        ),
-        createElement(
-            Grid,
-            { item: true, xs: 9 },
-            createElement(Divider),
-            createElement(
-                'form',
-                {},
-                createElement(
-                    Grid,
-                    { container: true },
-                    createElement(
-                        Grid,
-                        { item: true, xs: 11 },
-                        createElement(
-                            Skeleton,
-                            { width: '100%', height: '100%' },
                             createElement(Typography, {}, '.')
                         )
-                    ),
+                    )
+                ),
+                createElement(Divider),
+                createElement(
+                    Grid,
+                    { item: true, xs: 12, style: { padding: '10px' } },
                     createElement(
-                        Grid,
-                        { className: classes.send, xs: 1, item: true },
+                        Skeleton,
+                        {},
+                        createElement(TextField, {
+                            fullWidth: true
+                        })
+                    )
+                ),
+                createElement(Divider),
+                createElement(
+                    List,
+                    {},
+                    users.map((user) =>
                         createElement(
-                            Skeleton,
-                            { variant: 'circular' },
-                            createElement(Fab, {})
+                            ListItemButton,
+                            {},
+                            createElement(
+                                Skeleton,
+                                {},
+                                createElement(Avatar, {
+                                    className: classes.displayPhoto,
+                                    variant: 'rounded'
+                                })
+                            ),
+                            createElement(
+                                Skeleton,
+                                { width: '100%' },
+                                createElement(Typography, {}, user)
+                            )
                         )
                     )
                 )
