@@ -46,7 +46,7 @@ function ChatComponent(props: ChatComponentProps) {
         messageValue,
         handleChange
     } = props;
-    const messages = chats;
+    const messages = chats.sort((a, b) => b.time.localeCompare(a.time));
     const username = userName.charAt(0).toUpperCase() + userName.slice(1);
     const userID = Cookies.get('userID');
 
@@ -139,7 +139,14 @@ function ChatComponent(props: ChatComponentProps) {
                 },
                 createElement(
                     List,
-                    { style: { overflowY: 'auto', height: '100%' } },
+                    {
+                        style: {
+                            overflowY: 'auto',
+                            height: '100%',
+                            display: 'flex',
+                            flexDirection: 'column-reverse'
+                        }
+                    },
                     messages &&
                         messages.map((chat: MessageProps, index: number) =>
                             createElement(
