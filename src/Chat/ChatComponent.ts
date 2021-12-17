@@ -4,28 +4,24 @@ import Cookies from 'js-cookie';
 
 import Grid from '@mui/material/Grid';
 import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
 import People from '@material-ui/icons/People';
-import SendButton from '@material-ui/icons/Send';
 import TextField from '@mui/material/TextField';
 
-import {
-    Avatar,
-    Divider,
-    Fab,
-    ListItemButton,
-    ListItemText
-} from '@mui/material';
+import { Avatar, Divider, ListItemButton, ListItemText } from '@mui/material';
 import useStyles from './styles';
 import { StyledBadge } from './StyledBadgeComponent';
+import LauncherComponent from './LauncherComponent';
+import MessageList from './MessageListComponent';
 
 interface ChatComponentProps {
     users: any;
     userName: any;
     chats: MessageProps[];
     messageValue: string;
+    memberSelected: boolean;
     handleSubmit: any;
     handleChange: any;
+    updateChat: any;
     profilePicture: string;
 }
 
@@ -42,11 +38,13 @@ function ChatComponent(props: ChatComponentProps) {
         users,
         userName,
         profilePicture,
+        memberSelected,
         handleSubmit,
         messageValue,
-        handleChange
+        handleChange,
+        updateChat
     } = props;
-    const messages = chats.sort((a, b) => b.time.localeCompare(a.time));
+    const messages = chats.sort((a, b) => b.time.localeCompare(a.time)); // TODO: Sort by date and time
     const username = userName.charAt(0).toUpperCase() + userName.slice(1);
     const userID = Cookies.get('userID');
 
@@ -111,7 +109,7 @@ function ChatComponent(props: ChatComponentProps) {
                             user_Name.slice(1);
                         return createElement(
                             ListItemButton,
-                            { key: index },
+                            { key: index, onClick: updateChat },
                             createElement(People, {
                                 className: classes.displayPhoto
                             }),
@@ -137,72 +135,15 @@ function ChatComponent(props: ChatComponentProps) {
                         height: '100%'
                     }
                 },
-                createElement(
-                    List,
-                    {
-                        style: {
-                            overflowY: 'auto',
-                            height: '100%',
-                            display: 'flex',
-                            flexDirection: 'column-reverse'
-                        }
-                    },
-                    messages &&
-                        messages.map((chat: MessageProps, index: number) =>
-                            createElement(
-                                ListItem,
-                                { key: index },
-                                createElement(
-                                    Grid,
-                                    { container: true },
-                                    createElement(
-                                        Grid,
-                                        {
-                                            item: true,
-                                            xs: 12,
-                                            style: {
-                                                textAlign:
-                                                    userID === chat.userID
-                                                        ? 'right'
-                                                        : 'left'
-                                            }
-                                        },
-                                        createElement(ListItemText, {
-                                            primary: chat.data
-                                        }),
-                                        createElement(ListItemText, {
-                                            secondary: chat.time
-                                        })
-                                    )
-                                )
-                            )
-                        )
-                ),
-                createElement(Divider),
-                createElement(
-                    'form',
-                    { onSubmit: handleSubmit },
-                    createElement(
-                        'div',
-                        { className: classes.form },
-                        createElement(TextField, {
-                            fullWidth: true,
-                            label: 'Type something',
-                            name: 'value',
-                            value: messageValue,
-                            onChange: handleChange
-                        }),
-                        createElement(
-                            Fab,
-                            {
-                                color: 'primary',
-                                type: 'submit',
-                                style: { marginLeft: '10px' }
-                            },
-                            createElement(SendButton)
-                        )
-                    )
-                )
+                memberSelected
+                    ? MessageList({
+                          messages,
+                          userID,
+                          handleSubmit,
+                          messageValue,
+                          handleChange
+                      })
+                    : LauncherComponent()
             )
         )
     );
