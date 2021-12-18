@@ -4,7 +4,7 @@ import Cookies from 'js-cookie';
 
 import Grid from '@mui/material/Grid';
 import List from '@mui/material/List';
-import People from '@material-ui/icons/People';
+import People from '@mui/icons-material/People';
 import TextField from '@mui/material/TextField';
 
 import { Avatar, Divider, ListItemButton, ListItemText } from '@mui/material';
@@ -123,6 +123,7 @@ function ChatComponent(props: ChatComponentProps) {
                 )
             ),
             createElement(
+                // TODO: Best moved to MessageListComponent
                 'div',
                 {
                     style: {

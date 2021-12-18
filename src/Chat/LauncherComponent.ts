@@ -17,7 +17,7 @@ function Launcher() {
             createElement('p', { className: clsx(classes.arrow, classes.up) }),
             createElement(
                 Typography,
-                { variant: 'h4' },
+                { variant: 'h4', style: { alignSelf: 'center' } },
                 'Please select a member to chat with 😎'
             )
         )

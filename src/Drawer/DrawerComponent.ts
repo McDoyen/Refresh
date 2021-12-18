@@ -5,8 +5,8 @@ import { BrowserRouter as Router, Link, Route, Routes } from 'react-router-dom';
 import CssBaseline from '@mui/material/CssBaseline';
 import Drawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
-import ForumIcon from '@material-ui/icons/ForumTwoTone';
-import WeatherIcon from '@material-ui/icons/FilterDramaTwoTone';
+import ForumIcon from '@mui/icons-material/ForumTwoTone';
+import WeatherIcon from '@mui/icons-material/FilterDramaTwoTone';
 
 import WeatherContainer from '../Weather/WeatherContainer';
 import ChatContainer from '../Chat/ChatContainer';

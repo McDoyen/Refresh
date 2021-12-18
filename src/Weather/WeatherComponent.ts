@@ -1,8 +1,8 @@
 import { createElement } from 'react';
 
-import LocationIcon from '@material-ui/icons/MyLocation';
-import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
+import LocationIcon from '@mui/icons-material/MyLocation';
+import Grid from '@mui/material/Grid';
+import Typography from '@mui/material/Typography';
 
 import MapComponent from './MapComponent';
 

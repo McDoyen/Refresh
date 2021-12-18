@@ -1,11 +1,11 @@
 import { createElement } from 'react';
 
-import Grid from '@material-ui/core/Grid';
-
 import { MapContainer, TileLayer, Marker } from 'react-leaflet';
 import L from 'leaflet';
 import icon from 'leaflet/dist/images/marker-icon.png';
 import iconShadow from 'leaflet/dist/images/marker-shadow.png';
+
+import Grid from '@mui/material/Grid';
 
 import useStyles from './styles';
 

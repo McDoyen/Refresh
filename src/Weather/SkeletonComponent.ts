@@ -1,6 +1,6 @@
 import { createElement } from 'react';
 
-import Grid from '@material-ui/core/Grid';
+import Grid from '@mui/material/Grid';
 import Skeleton from '@mui/material/Skeleton';
 import useStyles from './styles';
 

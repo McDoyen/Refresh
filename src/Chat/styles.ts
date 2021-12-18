@@ -1,6 +1,6 @@
-import { makeStyles } from '@material-ui/core';
+import { makeStyles } from '@mui/styles';
 
-export default makeStyles((theme) => ({
+export default makeStyles(() => ({
     main: {
         paddingLeft: '48px',
         display: 'flex',
@@ -36,7 +36,10 @@ export default makeStyles((theme) => ({
     // Animated Arrow Styles
     '@keyframes uparrow': {
         '0%': { transform: 'translateX(1em) rotate(-90deg)', opacity: 0.4 },
-        '100%': { transform: 'translateX(-0.4em) rotate(-90deg)', opacity: 0.9 }
+        '100%': {
+            transform: 'translateX(-0.4em) rotate(-90deg)',
+            opacity: 0.9
+        }
     },
 
     arrow: {
@@ -51,7 +54,7 @@ export default makeStyles((theme) => ({
         width: 0
     },
     up: {
-        animation: `$uparrow 0.6s infinite alternate ${theme.transitions.easing.easeInOut}`,
+        animation: `$uparrow 0.6s infinite alternate`,
         borderBottom: '2em solid #00b6f1'
     }
 }));

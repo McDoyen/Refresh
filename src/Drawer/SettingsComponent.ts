@@ -1,6 +1,6 @@
 import { createElement, Fragment, useState } from 'react';
 
-import SettingsIcon from '@material-ui/icons/Settings';
+import SettingsIcon from '@mui/icons-material/Settings';
 import { Menu, MenuItem } from '@mui/material';
 import { useNavigate } from 'react-router';
 
