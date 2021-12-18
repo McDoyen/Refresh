@@ -18,7 +18,8 @@ interface ChatComponentProps {
     userName: any;
     chats: MessageProps[];
     messageValue: string;
-    memberSelected: boolean;
+    selected: boolean;
+    selectedUser: string;
     handleSubmit: any;
     handleChange: any;
     updateChat: any;
@@ -38,7 +39,8 @@ function ChatComponent(props: ChatComponentProps) {
         users,
         userName,
         profilePicture,
-        memberSelected,
+        selected,
+        selectedUser,
         handleSubmit,
         messageValue,
         handleChange,
@@ -109,7 +111,10 @@ function ChatComponent(props: ChatComponentProps) {
                             user_Name.slice(1);
                         return createElement(
                             ListItemButton,
-                            { key: index, onClick: updateChat },
+                            {
+                                key: index,
+                                onClick: () => updateChat(Username)
+                            },
                             createElement(People, {
                                 className: classes.displayPhoto
                             }),
@@ -136,13 +141,14 @@ function ChatComponent(props: ChatComponentProps) {
                         height: '100%'
                     }
                 },
-                memberSelected
+                selected
                     ? MessageList({
                           messages,
                           userID,
                           handleSubmit,
                           messageValue,
-                          handleChange
+                          handleChange,
+                          selectedUser
                       })
                     : LauncherComponent()
             )

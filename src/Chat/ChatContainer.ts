@@ -13,7 +13,10 @@ interface SyntheticBaseEvent {
 }
 
 function ChatContainer() {
-    const [memberSelected, setMember] = useState(false);
+    const [{ selected, selectedUser }, setMember] = useState({
+        selected: false,
+        selectedUser: ''
+    });
     const [chats, updateChats] = useState([]);
     const [messageValue, setMessageValue] = useState('');
     const [fetching, setFetching] = useState(true);
@@ -56,8 +59,8 @@ function ChatContainer() {
         }
     };
 
-    const updateChat = () => {
-        setMember(true);
+    const updateChat = (name: string) => {
+        setMember({ selected: true, selectedUser: name });
     };
 
     return fetching
@@ -68,7 +71,8 @@ function ChatContainer() {
               profilePicture: profilePicture(),
               chats,
               messageValue,
-              memberSelected,
+              selected,
+              selectedUser,
               handleChange,
               handleSubmit,
               updateChat

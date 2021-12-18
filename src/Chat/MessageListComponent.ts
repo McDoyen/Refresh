@@ -1,14 +1,20 @@
 import {
+    AppBar,
+    Avatar,
     Divider,
     Fab,
     Grid,
     List,
     ListItem,
     ListItemText,
-    TextField
+    TextField,
+    Toolbar,
+    Typography
 } from '@mui/material';
 import { createElement, Fragment } from 'react';
-import SendButton from '@material-ui/icons/Send';
+import SendButton from '@mui/icons-material/Send';
+import CallIcon from '@mui/icons-material/Call';
+import VideoCallIcon from '@mui/icons-material/VideoCall';
 import useStyles from './styles';
 
 interface MessageProps {
@@ -22,13 +28,30 @@ function MessageList({
     userID,
     handleSubmit,
     messageValue,
-    handleChange
+    handleChange,
+    selectedUser
 }: any) {
     const classes = useStyles();
 
     return createElement(
         Fragment,
         {},
+        createElement(
+            AppBar,
+            { position: 'static' },
+            createElement(
+                Toolbar,
+                { variant: 'dense', sx: { justifyContent: 'space-between' } },
+                createElement(Avatar, { sx: { mr: 2 } }),
+                createElement(
+                    Typography,
+                    { sx: { flexGrow: 1 } },
+                    selectedUser
+                ),
+                createElement(CallIcon, { sx: { mr: 2 } }),
+                createElement(VideoCallIcon)
+            )
+        ),
         createElement(
             List,
             {

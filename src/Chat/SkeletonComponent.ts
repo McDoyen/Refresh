@@ -60,10 +60,10 @@ function SkeletonComponent() {
                 createElement(
                     List,
                     {},
-                    users.map((user) =>
+                    users.map((user, index) =>
                         createElement(
                             ListItemButton,
-                            {},
+                            { key: index },
                             createElement(
                                 Skeleton,
                                 {},
