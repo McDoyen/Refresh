@@ -95,7 +95,6 @@ app.post('/login', (request, response) => {
                     message: 'Incorrect username or password'
                 });
             }
-            console.log(user.profilePicture);
             response.status(200).send({
                 id: user._id,
                 userName: user.userName,
@@ -117,11 +116,12 @@ app.delete('/deleteToken/:accessToken', (request) => {
 });
 
 app.post('/addMessage', (request, response) => {
-    const { userID, data, time } = request.body.newChat;
+    const { userID, data, time, chatID } = request.body.newChat;
     const newMessage = new Chat({
         userID,
         data,
-        time
+        time,
+        chatID
     });
     Chat.create(newMessage)
         .then((dbmessage) => {
@@ -131,7 +131,7 @@ app.post('/addMessage', (request, response) => {
 });
 
 app.get('/retrieveMessages', (request, response) => {
-    Chat.find({}, { _id: 0, userID: 1, data: 1, time: 1 })
+    Chat.find({}, { _id: 0, userID: 1, data: 1, time: 1, chatID: 1 })
         .then((chats) => {
             response.send(chats);
         })
@@ -139,9 +139,9 @@ app.get('/retrieveMessages', (request, response) => {
 });
 
 app.get('/retrieveUsers', (request, response) => {
-    User.find({}, { _id: 0, userName: 1 })
+    User.find({}, { _id: 0, _id: 1, userName: 1 })
         .then((users) => {
-            response.send(users);
+            response.send(users); // TODO: Send an object
         })
         .catch((error) => response.json(error));
 });

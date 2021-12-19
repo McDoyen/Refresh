@@ -13,9 +13,10 @@ interface SyntheticBaseEvent {
 }
 
 function ChatContainer() {
-    const [{ selected, selectedUser }, setMember] = useState({
+    const [{ selected, selectedUser, selectedUserID }, setMember] = useState({
         selected: false,
-        selectedUser: ''
+        selectedUser: '',
+        selectedUserID: ''
     });
     const [chats, updateChats] = useState([]);
     const [messageValue, setMessageValue] = useState('');
@@ -44,11 +45,13 @@ function ChatContainer() {
     const handleSubmit = (event: SyntheticBaseEvent) => {
         event.preventDefault();
         const data = event.target[0].value;
+        const userID = Cookies.get('userID');
         if (data) {
             const newChat = {
-                userID: Cookies.get('userID'),
+                userID,
                 data,
-                time: new Date().toLocaleTimeString()
+                time: new Date().toLocaleTimeString(),
+                chatID: `${userID}${selectedUserID}`
             };
             updateChats((oldChats): any => [...oldChats, newChat]);
             axios
@@ -59,8 +62,8 @@ function ChatContainer() {
         }
     };
 
-    const updateChat = (name: string) => {
-        setMember({ selected: true, selectedUser: name });
+    const updateChat = (name: string, id: string) => {
+        setMember({ selected: true, selectedUser: name, selectedUserID: id });
     };
 
     return fetching
@@ -73,6 +76,7 @@ function ChatContainer() {
               messageValue,
               selected,
               selectedUser,
+              selectedUserID,
               handleChange,
               handleSubmit,
               updateChat

@@ -20,6 +20,7 @@ interface ChatComponentProps {
     messageValue: string;
     selected: boolean;
     selectedUser: string;
+    selectedUserID: string;
     handleSubmit: any;
     handleChange: any;
     updateChat: any;
@@ -30,6 +31,7 @@ interface MessageProps {
     userID: string;
     data: string;
     time: any;
+    chatID: string;
 }
 
 function ChatComponent(props: ChatComponentProps) {
@@ -41,14 +43,22 @@ function ChatComponent(props: ChatComponentProps) {
         profilePicture,
         selected,
         selectedUser,
+        selectedUserID, // TODO: Put selected user data in one object
         handleSubmit,
         messageValue,
         handleChange,
         updateChat
     } = props;
-    const messages = chats.sort((a, b) => b.time.localeCompare(a.time)); // TODO: Sort by date and time
-    const username = userName.charAt(0).toUpperCase() + userName.slice(1);
     const userID = Cookies.get('userID');
+    const messages = chats
+        .filter((chat) => chat.chatID === `${userID}${selectedUserID}`)
+        .concat(
+            chats.filter((chat) => chat.chatID === `${selectedUserID}${userID}`)
+        )
+        .sort((a, b) => b.time.localeCompare(a.time));
+    const username = userName.charAt(0).toUpperCase() + userName.slice(1);
+    // eslint-disable-next-line no-underscore-dangle
+    const userList = users.filter((user: any) => user._id !== userID); // TODO: Fix this from the server
 
     return createElement(
         'div',
@@ -105,26 +115,30 @@ function ChatComponent(props: ChatComponentProps) {
                 createElement(
                     List,
                     {},
-                    users.map(({ userName: user_Name }: any, index: number) => {
-                        const Username =
-                            user_Name.charAt(0).toUpperCase() +
-                            user_Name.slice(1);
-                        return createElement(
-                            ListItemButton,
-                            {
-                                key: index,
-                                onClick: () => updateChat(Username)
-                            },
-                            createElement(People, {
-                                className: classes.displayPhoto
-                            }),
-                            createElement(ListItemText, { primary: Username }),
-                            createElement(ListItemText, {
-                                className: classes.onlineBanner,
-                                secondary: 'online'
-                            })
-                        );
-                    })
+                    userList.map(
+                        ({ userName: user_Name, _id }: any, index: number) => {
+                            const Username =
+                                user_Name.charAt(0).toUpperCase() +
+                                user_Name.slice(1);
+                            return createElement(
+                                ListItemButton,
+                                {
+                                    key: index,
+                                    onClick: () => updateChat(Username, _id)
+                                },
+                                createElement(People, {
+                                    className: classes.displayPhoto
+                                }),
+                                createElement(ListItemText, {
+                                    primary: Username
+                                }),
+                                createElement(ListItemText, {
+                                    className: classes.onlineBanner,
+                                    secondary: 'online'
+                                })
+                            );
+                        }
+                    )
                 )
             ),
             createElement(

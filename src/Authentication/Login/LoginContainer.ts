@@ -74,7 +74,6 @@ function LoginContainer({ setLoggedIn }: any) {
         axios
             .post('http://localhost:8081/login', data)
             .then((response) => {
-                console.log(response.data.profilePicture);
                 const { id, token, message, userName, profilePicture } =
                     response.data;
                 if (token && token.accessToken) {
