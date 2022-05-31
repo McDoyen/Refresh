@@ -1,153 +1,173 @@
-import { createElement } from "react";
+import { createElement } from 'react';
 
-import Grid from "@mui/material/Grid";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import People from "@material-ui/icons/People";
-import SendButton from "@material-ui/icons/Send";
-import TextField from "@mui/material/TextField";
+import Cookies from 'js-cookie';
 
-import useStyles from "./styles";
-import { Divider, Fab, ListItemButton, ListItemText } from "@mui/material";
+import Grid from '@mui/material/Grid';
+import List from '@mui/material/List';
+import People from '@mui/icons-material/People';
+import TextField from '@mui/material/TextField';
+
+import { Avatar, Divider, ListItemButton, ListItemText } from '@mui/material';
+import useStyles from './styles';
+import { StyledBadge } from './StyledBadgeComponent';
+import LauncherComponent from './LauncherComponent';
+import MessageList from './MessageListComponent';
 
 interface ChatComponentProps {
-  userName: any;
-  chats: { data: string; time: string; orientation: string }[];
-  messageValue: string;
-  handleSubmit: any;
-  handleChange: any;
+    users: any;
+    userName: any;
+    chats: MessageProps[];
+    messageValue: string;
+    selected: boolean;
+    selectedUser: string;
+    selectedUserID: string;
+    handleSubmit: any;
+    handleChange: any;
+    updateChat: any;
+    profilePicture: string;
+}
+
+interface MessageProps {
+    userID: string;
+    data: string;
+    time: any;
+    chatID: string;
+    createdAt: string;
 }
 
 function ChatComponent(props: ChatComponentProps) {
-  const classes = useStyles();
+    const classes = useStyles();
+    const {
+        chats,
+        users,
+        userName,
+        profilePicture,
+        selected,
+        selectedUser,
+        selectedUserID, // TODO: Put selected user data in one object
+        handleSubmit,
+        messageValue,
+        handleChange,
+        updateChat
+    } = props;
+    const userID = Cookies.get('userID');
+    const messages = chats
+        .filter((chat) => chat.chatID === `${userID}${selectedUserID}`)
+        .concat(
+            chats.filter((chat) => chat.chatID === `${selectedUserID}${userID}`)
+        )
+        .sort((a, b) => b.time.localeCompare(a.time));
+    const username = userName.charAt(0).toUpperCase() + userName.slice(1);
+    // eslint-disable-next-line no-underscore-dangle
+    const userList = users.filter((user: any) => user._id !== userID); // TODO: Fix this from the server
 
-  return createElement(
-    Grid,
-    { container: true, className: classes.chatSection },
-    createElement(
-      Grid,
-      { item: true, xs: 3, className: classes.memberSection },
-      createElement(
-        List,
-        {},
+    return createElement(
+        'div',
+        { className: classes.main },
         createElement(
-          ListItemButton,
-          {},
-          createElement(People, { className: classes.displayPhoto }),
-          createElement(ListItemText, { primary: props.userName })
-        )
-      ),
-      createElement(Divider),
-      createElement(
-        Grid,
-        { item: true, xs: 12, style: { padding: "10px" } },
-        createElement(TextField, {
-          fullWidth: true,
-          label: "Search",
-        })
-      ),
-      createElement(Divider),
-      createElement(
-        List,
-        {},
-        createElement(
-          ListItemButton,
-          {},
-          createElement(People),
-          createElement(
-            ListItemText,
-            { primary: "Paul McDoyen" },
-            "Paul McDoyen"
-          ),
-          createElement(ListItemText, {
-            className: classes.onlineBanner,
-            secondary: "online",
-          })
-        ),
-        createElement(
-          ListItemButton,
-          {},
-          createElement(People),
-          createElement(
-            ListItemText,
-            { primary: "Paul McDoyen" },
-            "Paul McDoyen"
-          )
-        ),
-        createElement(
-          ListItemButton,
-          {},
-          createElement(People),
-          createElement(
-            ListItemText,
-            { primary: "Paul McDoyen" },
-            "Paul McDoyen"
-          )
-        )
-      )
-    ),
-    createElement(
-      Grid,
-      { item: true, xs: 9, className: classes.messageArea },
-      createElement(
-        List,
-        {},
-        props.chats.map(
-          (
-            chat: { orientation: any; data: string; time: any },
-            index: number
-          ) =>
+            'div',
+            { className: classes.container },
             createElement(
-              ListItem,
-              { key: index },
-              createElement(
-                Grid,
-                { container: true },
+                'div',
+                { className: classes.memberSection },
                 createElement(
-                  Grid,
-                  {
-                    item: true,
-                    xs: 12,
-                    style: { textAlign: chat.orientation },
-                  },
-                  createElement(ListItemText, { primary: chat.data }),
-                  createElement(ListItemText, { secondary: chat.time })
+                    List,
+                    {},
+                    createElement(
+                        ListItemButton,
+                        {},
+                        createElement(
+                            StyledBadge,
+                            {
+                                overlap: 'circular',
+                                anchorOrigin: {
+                                    vertical: 'bottom',
+                                    horizontal: 'right'
+                                },
+                                variant: 'dot'
+                            },
+                            createElement(Avatar, {
+                                alt: userName,
+                                src: profilePicture,
+                                variant: 'rounded'
+                            })
+                        ),
+                        createElement(ListItemText, {
+                            primary: username,
+                            sx: {
+                                position: 'absolute',
+                                bottom: 0,
+                                left: '60px'
+                            }
+                        })
+                    )
+                ),
+                createElement(Divider),
+                createElement(
+                    Grid,
+                    { item: true, xs: 12, style: { padding: '10px' } },
+                    createElement(TextField, {
+                        fullWidth: true,
+                        label: 'Search'
+                    })
+                ),
+                createElement(Divider),
+                createElement(
+                    List,
+                    {},
+                    userList.map(
+                        ({ userName: user_Name, _id }: any, index: number) => {
+                            const Username =
+                                user_Name.charAt(0).toUpperCase() +
+                                user_Name.slice(1);
+                            return createElement(
+                                ListItemButton,
+                                {
+                                    key: index,
+                                    onClick: () => updateChat(Username, _id)
+                                },
+                                createElement(People, {
+                                    className: classes.displayPhoto
+                                }),
+                                createElement(ListItemText, {
+                                    primary: Username
+                                }),
+                                createElement(ListItemText, {
+                                    className: classes.onlineBanner,
+                                    secondary: 'online'
+                                })
+                            );
+                        }
+                    )
                 )
-              )
-            )
-        )
-      ),
-      createElement(Divider),
-      createElement(
-        "form",
-        { onSubmit: props.handleSubmit },
-        createElement(
-          Grid,
-          { container: true, className: classes.textField },
-          createElement(
-            Grid,
-            { item: true, xs: 11 },
-            createElement(TextField, {
-              fullWidth: true,
-              label: "Type something",
-              name: "value",
-              value: props.messageValue,
-              onChange: props.handleChange,
-            })
-          ),
-          createElement(
-            Grid,
-            { className: classes.send, xs: 1, item: true },
+            ),
             createElement(
-              Fab,
-              { color: "primary", type: "submit" },
-              createElement(SendButton)
+                // TODO: Best moved to MessageListComponent
+                'div',
+                {
+                    style: {
+                        width: '70%',
+                        flexDirection: 'column',
+                        display: 'flex',
+                        bottom: 0,
+                        position: 'absolute',
+                        right: 0,
+                        height: '100%'
+                    }
+                },
+                selected
+                    ? MessageList({
+                          messages,
+                          userID,
+                          handleSubmit,
+                          messageValue,
+                          handleChange,
+                          selectedUser
+                      })
+                    : LauncherComponent()
             )
-          )
         )
-      )
-    )
-  );
+    );
 }
 
 export default ChatComponent;

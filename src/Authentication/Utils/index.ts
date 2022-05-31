@@ -1,27 +1,44 @@
-import axios from "axios";
+import axios from 'axios';
+import Cookies from 'js-cookie';
 
-const token = localStorage.getItem("token");
+const token = Cookies.get('token');
 const tokenObject = token ? JSON.parse(token) : null;
-const accessToken = tokenObject ? tokenObject.accessToken : null;
 
 export const logout = () => {
-  localStorage.clear();
-  if (accessToken) {
-    axios.delete(`http://localhost:8081/deleteToken/${accessToken}`);
-  }
+    Cookies.remove('token');
+    Cookies.remove('userName');
+    Cookies.remove('userID');
+    if (tokenObject) {
+        axios
+            .delete(
+                `http://localhost:8081/deleteToken/${tokenObject.accessToken}`
+            )
+            .catch((error) => console.error(error));
+    }
 };
 
 export const loggedIn = () => {
-  if (accessToken) {
-    return true;
-  } else {
+    if (token) {
+        return true;
+    }
+
     return false;
-  }
 };
 
 export const userName = () => {
-  const userName = localStorage.getItem("userName");
-  if (userName) {
-    return userName;
-  }
+    const username = Cookies.get('userName');
+    if (username) {
+        return username;
+    }
+
+    return '';
+};
+
+export const profilePicture = () => {
+    const profilepicture = Cookies.get('profilePicture');
+    if (profilepicture) {
+        return profilepicture;
+    }
+
+    return '';
 };
