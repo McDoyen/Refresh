@@ -131,7 +131,7 @@ app.post('/addMessage', (request, response) => {
 });
 
 app.get('/retrieveMessages', (request, response) => {
-    Chat.find({}, { _id: 0, userID: 1, data: 1, time: 1, chatID: 1 })
+    Chat.find({}, { _id: 0, userID: 1, data: 1, time: 1, chatID: 1, createdAt: 1 })
         .then((chats) => {
             response.send(chats);
         })

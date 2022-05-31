@@ -32,6 +32,7 @@ interface MessageProps {
     data: string;
     time: any;
     chatID: string;
+    createdAt: string;
 }
 
 function ChatComponent(props: ChatComponentProps) {
@@ -87,8 +88,7 @@ function ChatComponent(props: ChatComponentProps) {
                             },
                             createElement(Avatar, {
                                 alt: userName,
-                                // @ts-ignore
-                                src: { profilePicture },
+                                src: profilePicture,
                                 variant: 'rounded'
                             })
                         ),

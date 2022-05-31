@@ -50,7 +50,7 @@ function ChatContainer() {
             const newChat = {
                 userID,
                 data,
-                time: new Date().toLocaleTimeString(),
+                time: new Date().toISOString(),
                 chatID: `${userID}${selectedUserID}`
             };
             updateChats((oldChats): any => [...oldChats, newChat]);

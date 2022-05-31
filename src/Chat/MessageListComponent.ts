@@ -63,8 +63,9 @@ function MessageList({
                 }
             },
             messages &&
-                messages.map((chat: MessageProps, index: number) =>
-                    createElement(
+                messages.map((chat: MessageProps, index: number) => {
+                    const time = new Date(chat.time).toLocaleTimeString();
+                    return createElement(
                         ListItem,
                         { key: index },
                         createElement(
@@ -86,12 +87,12 @@ function MessageList({
                                     primary: chat.data
                                 }),
                                 createElement(ListItemText, {
-                                    secondary: chat.time
+                                    secondary: time
                                 })
                             )
                         )
-                    )
-                )
+                    );
+                })
         ),
         createElement(Divider),
         createElement(
